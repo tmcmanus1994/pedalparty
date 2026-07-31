@@ -42,9 +42,9 @@ src/
   app/
     layout.tsx            fonts + metadata
     page.tsx              composes the one page, reads the ride, emits JSON-LD
-    globals.css           the design system (tokens, card system, motion)
+    globals.css           the design system (type, tokens, card system, motion)
     icon.svg              favicon
-    fonts/                self-hosted Baloo 2 + Inter woff2
+    fonts/                self-hosted Baloo 2 variable woff2 (built, see below)
     api/contact/route.ts  contact form handler
   components/             one file per section
   lib/
@@ -52,12 +52,18 @@ src/
     ride.ts               Next Ride state machine + Google Sheet reader
     spectrum.ts           the rainbow, with rules
     time.ts               Central-time helpers
+Baloo_2/                  official Google Fonts release — OFL licence + source TTF
 ```
 
 ### The design system
 
 Everything visual comes from tokens in `src/app/globals.css`:
 
+- **One typeface.** Baloo 2 is the only family on the site — display *and*
+  body. Hierarchy is carried entirely by weight: 500 body, 700 subheads and
+  emphasis, 800 display. Never introduce a second face; reach for a weight.
+  Because Baloo 2 sets small for its point size, the body scale runs a step
+  larger than a neutral sans would (`--text-body: 17px`).
 - **One card treatment** — `.card` / `.card-sm` (3px ink border, 22px radius,
   hard 6px offset shadow). `.sticker` adds rotation. Nothing defines its own
   border/shadow/radius.
@@ -71,8 +77,33 @@ Everything visual comes from tokens in `src/app/globals.css`:
   bright brand value), `on` (a foreground that clears 4.5:1 against that fill)
   and `text` (a darkened variant for when the accent is itself type on a light
   background). Yellow never carries text without an ink foreground.
+- **One section rhythm.** Every single-column section uses `.section-head`
+  (centred, one measure) and `.section-body` (one gap, `--head-gap`). The
+  two-column About section is the deliberate exception and keeps its
+  left-aligned editorial column.
 - **Motion** respects `prefers-reduced-motion` — the ticker, the gallery
   auto-scroll, the countdown tick and every scroll-in reveal all stop.
+
+### Rebuilding the font
+
+`src/app/fonts/baloo2-variable.woff2` is generated from the official release in
+`Baloo_2/` — subset to latin + latin-ext plus the punctuation and arrows the
+copy uses. One ~50 KB file covers every weight 400–800, and there is no Google
+Fonts request at build or runtime.
+
+To regenerate after replacing the source TTF:
+
+```bash
+pip install fonttools brotli zopfli
+pyftsubset Baloo_2/Baloo2-VariableFont_wght.ttf \
+  --unicodes="U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2190-2193,U+2212,U+2215,U+FEFF,U+FFFD,U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF" \
+  --layout-features=kern,liga,clig,calt,ccmp,locl,mark,mkmk \
+  --flavor=woff2 --with-zopfli --name-IDs='*' --name-legacy --notdef-outline \
+  --output-file=src/app/fonts/baloo2-variable.woff2
+```
+
+Note Baloo 2 has no ★ (U+2605), so the ticker draws its star as an SVG rather
+than letting the character fall back to a system face.
 
 ### The Next Ride state machine
 
@@ -132,4 +163,5 @@ marked with a `⚠️` comment at the exact place in the code.
 | 4 | **Gallery photos.** Final photos come from @pedalpartylr; the strip renders placeholder tiles until then. | `src/components/Gallery.tsx` → `GALLERY_PHOTOS` |
 | 5 | **Form endpoint** needs configuring (Resend key or webhook URL). | `.env.example` |
 | 6 | **Brand logo.** The file labelled `logo.png` in the handoff is the washi-tape texture; the watercolour rainbow mark was not included. The footer/favicon use a drawn placeholder wheel. | `src/components/Icons.tsx` → `LogoMark`, `src/app/icon.svg` |
-| 7 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |
+| 7 | **OG image** (`public/images/og.png`) was rendered from the placeholder hero. Regenerate it once the real hero photo lands. | `src/app/layout.tsx` |
+| 8 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |

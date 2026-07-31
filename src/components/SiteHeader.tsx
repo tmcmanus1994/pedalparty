@@ -66,10 +66,10 @@ export default function SiteHeader() {
       }`}
       style={{ minHeight: "var(--header-h)" }}
     >
-      <div className="shell flex h-[60px] items-center justify-between gap-3">
+      <div className="shell flex h-[var(--header-h)] items-center justify-between gap-3">
         <a
           href={`mailto:${site.email}`}
-          className={`font-display text-[0.78rem] font-bold tracking-wide underline decoration-2 underline-offset-4 sm:text-sm ${
+          className={`text-[0.88rem] font-bold tracking-wide underline decoration-2 underline-offset-4 sm:text-[0.95rem] ${
             scrolled ? "text-purple" : "text-white drop-shadow-[0_1px_3px_rgba(34,34,34,0.85)]"
           }`}
         >

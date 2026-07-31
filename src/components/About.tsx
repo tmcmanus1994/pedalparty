@@ -11,16 +11,16 @@ const TAGLINE_COLOR: Record<(typeof tagline)[number]["tone"], string> = {
 export default function About() {
   return (
     <section id="about" className="scroll-mt-24 bg-purple text-white">
-      <div className="shell band">
+      <div className="shell pb-14 pt-[var(--spacing-section)] md:pt-[var(--spacing-section-lg)]">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
           <Reveal>
-            <h2 className="h-section font-display text-balance">{about.heading}</h2>
-            <div className="mt-5 space-y-4 text-[0.95rem] leading-relaxed text-white/90">
+            <h2 className="h-section text-balance">{about.heading}</h2>
+            <div className="mt-5 space-y-4 leading-[1.6] text-white/90">
               {about.paragraphs.map((p) => (
                 <p key={p.slice(0, 24)}>{p}</p>
               ))}
             </div>
-            <p className="mt-6 font-display text-lg font-bold">
+            <p className="mt-7 text-xl font-bold">
               {about.closerLead}
               <a
                 href="#contact"
@@ -48,10 +48,10 @@ export default function About() {
                       } as React.CSSProperties
                     }
                   >
-                    <span className="font-display text-[clamp(1.35rem,4.5vw,1.85rem)] font-extrabold leading-none">
+                    <span className="text-[clamp(1.45rem,4.6vw,1.95rem)] font-extrabold leading-none">
                       {stat.value}
                     </span>
-                    <span className="mt-2 font-display text-[0.6rem] font-bold uppercase leading-tight tracking-[0.1em]">
+                    <span className="mt-2 text-[0.68rem] font-bold uppercase leading-tight tracking-[0.1em]">
                       {stat.label}
                     </span>
                   </div>
@@ -63,8 +63,8 @@ export default function About() {
       </div>
 
       {/* Tagline strip — same purple band, its own rhythm slot. */}
-      <Reveal className="shell pb-16 text-center sm:pb-20">
-        <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-display text-[clamp(1.5rem,5.5vw,2.6rem)] font-extrabold">
+      <Reveal className="shell pb-[var(--spacing-section)] text-center md:pb-[var(--spacing-section-lg)]">
+        <p className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[clamp(1.7rem,5.8vw,2.9rem)] font-extrabold">
           {tagline.map((part) => (
             <span key={part.text} style={{ color: TAGLINE_COLOR[part.tone] }}>
               {part.text}

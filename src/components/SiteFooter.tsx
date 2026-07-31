@@ -10,7 +10,7 @@ const SOCIAL_LINKS = [
 export default function SiteFooter() {
   return (
     <footer className="bg-purple text-white">
-      <div className="shell flex flex-col items-center gap-6 py-12 text-center">
+      <div className="shell flex flex-col items-center gap-7 py-14 text-center">
         <LogoMark className="h-14 w-14" />
 
         <nav aria-label="Footer">
@@ -19,7 +19,7 @@ export default function SiteFooter() {
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className="font-display text-sm font-bold text-white/90 underline-offset-4 hover:underline"
+                  className="text-[0.98rem] font-bold text-white/90 underline-offset-4 hover:underline"
                 >
                   {item.label}
                 </a>
@@ -44,7 +44,7 @@ export default function SiteFooter() {
           ))}
         </ul>
 
-        <p className="max-w-[46ch] text-[0.85rem] text-white/80">{footer.line}</p>
+        <p className="max-w-[52ch] text-balance text-body-sm text-white/80">{footer.line}</p>
       </div>
     </footer>
   );

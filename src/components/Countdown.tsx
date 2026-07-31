@@ -59,12 +59,12 @@ export default function Countdown({
             className="flex flex-col items-center justify-center rounded-[14px] border-[3px] border-ink px-1 py-2.5 shadow-[4px_4px_0_var(--color-ink)] sm:rounded-[16px] sm:py-3"
             style={{ background: s.fill, color: s.on }}
           >
-            <span className="overflow-hidden font-display text-[clamp(1.35rem,7vw,2.25rem)] font-extrabold leading-none tabular-nums">
+            <span className="overflow-hidden text-[clamp(1.5rem,7.5vw,2.5rem)] font-extrabold leading-none tabular-nums">
               <span key={display} className="tick block">
                 {display}
               </span>
             </span>
-            <span className="mt-1 font-display text-[clamp(0.5rem,2.2vw,0.68rem)] font-bold uppercase leading-none tracking-[0.12em]">
+            <span className="mt-1.5 text-[clamp(0.56rem,2.3vw,0.72rem)] font-bold uppercase leading-none tracking-[0.12em]">
               {unit.label}
             </span>
           </div>

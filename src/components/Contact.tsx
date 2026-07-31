@@ -60,23 +60,23 @@ export default function Contact() {
   return (
     <section id="contact" className="scroll-mt-24 border-y-[3px] border-ink bg-peach">
       <div className="shell band">
-        <Reveal className="text-center">
-          <h2 className="h-section font-display">
+        <Reveal className="section-head">
+          <h2 className="h-section">
             <span style={{ color: "#5f13a9" }}>{contact.headingLead.trim()}</span>{" "}
             <span aria-hidden="true">{contact.headingEmoji}</span>
           </h2>
-          <p className="sub-section mx-auto mt-2">{contact.sub}</p>
+          <p className="sub-section">{contact.sub}</p>
         </Reveal>
 
-        <div className="mt-9 grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-9">
-          <ul className="space-y-3.5">
+        <div className="section-body grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-8">
+          <ul className="space-y-4">
             {SOCIALS.map((social, i) => (
               <Reveal as="li" key={social.label} delay={i * 70}>
                 <a
                   href={social.href}
                   target={social.href.startsWith("http") ? "_blank" : undefined}
                   rel={social.href.startsWith("http") ? "noreferrer noopener" : undefined}
-                  className="flex items-center gap-3.5 rounded-[16px] border-[3px] border-ink px-4 py-3.5 shadow-[var(--card-shadow-sm)] transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                  className="flex items-center gap-3.5 rounded-[16px] border-[3px] border-ink px-4 py-4 shadow-[var(--card-shadow-sm)] transition-transform duration-150 hover:-translate-x-px hover:-translate-y-px active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
                   style={{ background: social.fill, color: social.on }}
                 >
                   <span
@@ -86,10 +86,10 @@ export default function Contact() {
                     <social.Icon className="h-5 w-5" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate font-display text-[0.95rem] font-extrabold">
+                    <span className="block truncate text-[1.02rem] font-extrabold leading-tight">
                       {social.handle}
                     </span>
-                    <span className="block text-[0.78rem] font-medium opacity-90">
+                    <span className="block text-[0.85rem] leading-tight opacity-90">
                       {social.label}
                     </span>
                   </span>
@@ -99,10 +99,10 @@ export default function Contact() {
           </ul>
 
           <Reveal delay={80}>
-            <form onSubmit={onSubmit} className="card p-5 sm:p-7" noValidate={false}>
-              <div className="grid gap-4 sm:grid-cols-2">
+            <form onSubmit={onSubmit} className="card p-6 sm:p-8" noValidate={false}>
+              <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="name" className="mb-1.5 block font-display text-sm font-bold">
+                  <label htmlFor="name" className="field-label">
                     {contact.fields.name.label}
                   </label>
                   <input
@@ -117,7 +117,7 @@ export default function Contact() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="mb-1.5 block font-display text-sm font-bold">
+                  <label htmlFor="email" className="field-label">
                     {contact.fields.email.label}
                   </label>
                   <input
@@ -133,8 +133,8 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="mt-4">
-                <label htmlFor="message" className="mb-1.5 block font-display text-sm font-bold">
+              <div className="mt-5">
+                <label htmlFor="message" className="field-label">
                   {contact.fields.message.label}
                 </label>
                 <textarea
@@ -154,7 +154,7 @@ export default function Contact() {
                 <input id="company" name="company" tabIndex={-1} autoComplete="off" />
               </div>
 
-              <div className="mt-5 flex flex-wrap items-center gap-4">
+              <div className="mt-6 flex flex-wrap items-center gap-4">
                 <button
                   type="submit"
                   className="btn btn-primary"
@@ -166,7 +166,7 @@ export default function Contact() {
                 </button>
 
                 {/* ⚠️ Placeholder microcopy — final strings TBD (handoff §8 item 4). */}
-                <p aria-live="polite" className="text-[0.9rem] font-semibold">
+                <p aria-live="polite" className="text-body-sm font-bold">
                   {status === "sent" ? (
                     <span style={{ color: "#1e7a38" }}>{contact.successPlaceholder}</span>
                   ) : null}

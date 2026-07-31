@@ -18,7 +18,7 @@ function ListCard({ title, items, tone, delay }: ListCardProps) {
 
   return (
     <Reveal as="li" delay={delay} className="h-full">
-      <div className="card flex h-full flex-col p-5 sm:p-6">
+      <div className="card flex h-full flex-col p-6 sm:p-7">
         <div className="flex items-center gap-3">
           <span
             aria-hidden="true"
@@ -27,12 +27,12 @@ function ListCard({ title, items, tone, delay }: ListCardProps) {
           >
             <Marker className="h-4 w-4" />
           </span>
-          <h3 className="font-display text-xl" style={{ color: headingColor }}>
+          <h3 className="text-2xl uppercase tracking-[0.04em]" style={{ color: headingColor }}>
             {title}
           </h3>
         </div>
 
-        <ul className="mt-5 space-y-3">
+        <ul className="mt-6 space-y-3.5">
           {items.map((item) => (
             <li key={item} className="flex items-start gap-3">
               <span
@@ -42,7 +42,7 @@ function ListCard({ title, items, tone, delay }: ListCardProps) {
               >
                 <Marker className="h-3 w-3" />
               </span>
-              <span className="text-[0.93rem] leading-snug">{item}</span>
+              <span className="text-body-sm leading-[1.45]">{item}</span>
             </li>
           ))}
         </ul>
@@ -55,21 +55,21 @@ export default function RideSmart() {
   return (
     <section id="safety" className="band scroll-mt-24 bg-cream">
       <div className="shell">
-        <Reveal>
-          <h2 className="h-section font-display">
+        <Reveal className="section-head">
+          <h2 className="h-section">
             Ride <span style={{ color: "#1e7a38" }}>Smart</span>
           </h2>
-          <p className="sub-section mt-2">{rideSmart.sub}</p>
+          <p className="sub-section">{rideSmart.sub}</p>
         </Reveal>
 
         {/* DO first on mobile, equal heights on desktop */}
-        <ul className="mt-8 grid items-stretch gap-5 md:grid-cols-2 md:gap-6">
+        <ul className="section-body grid items-stretch gap-6 md:grid-cols-2">
           <ListCard title={rideSmart.doTitle} items={rideSmart.dos} tone="do" delay={0} />
           <ListCard title={rideSmart.dontTitle} items={rideSmart.donts} tone="dont" delay={80} />
         </ul>
 
         <Reveal delay={140}>
-          <p className="mx-auto mt-7 max-w-[62ch] text-center text-[0.88rem] text-ink-soft">
+          <p className="mx-auto mt-8 max-w-[62ch] text-center text-body-sm text-ink-soft">
             <span aria-hidden="true">🔧</span> {rideSmart.footnote}
           </p>
         </Reveal>

@@ -4,6 +4,9 @@
    Pedal Party design system
    Festival-poster / sticker-sheet: chunky rounded cards, hard
    offset shadows, thick ink borders, pill buttons, rainbow accents.
+
+   TYPE: Baloo 2 is the only family. Hierarchy is carried entirely by
+   weight (500 body → 700 subheads → 800 display), never by a second face.
    ============================================================ */
 
 @theme {
@@ -42,14 +45,14 @@
   --color-peach-deep: #fcd3a6;
   --color-ice: #dbf9ff;
 
-  /* --- Type --- */
+  /* --- Type: one family, weight does the work --- */
   --font-display: var(--font-baloo), ui-rounded, "Trebuchet MS", system-ui,
     sans-serif;
-  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-display);
 
   /* --- Section rhythm --- */
-  --spacing-section: 5rem;
-  --spacing-section-lg: 7rem;
+  --spacing-section: 5.5rem;
+  --spacing-section-lg: 7.5rem;
 }
 
 @theme inline {
@@ -58,18 +61,32 @@
 }
 
 /* ============================================================
-   Card / sticker tokens — ONE set, applied everywhere.
+   Tokens
    ============================================================ */
 :root {
+  /* card / sticker */
   --card-border-w: 3px;
   --card-radius: 22px;
   --card-radius-sm: 14px;
-  --card-shadow-x: 6px;
-  --card-shadow-y: 6px;
-  --card-shadow: var(--card-shadow-x) var(--card-shadow-y) 0 var(--color-ink);
+  --card-shadow: 6px 6px 0 var(--color-ink);
   --card-shadow-sm: 4px 4px 0 var(--color-ink);
   --card-shadow-xs: 3px 3px 0 var(--color-ink);
-  --header-h: 60px;
+  --header-h: 64px;
+
+  /* type scale — Baloo 2 sits small for its point size, so the body
+     sizes run a step larger than a neutral sans would. */
+  --text-body: 1.0625rem; /* 17px */
+  --text-body-sm: 0.975rem;
+  --text-micro: 0.85rem;
+  --leading-body: 1.6;
+
+  /* weights */
+  --w-body: 500;
+  --w-strong: 700;
+  --w-head: 800;
+
+  /* the one gap between a section head and its content */
+  --head-gap: 2.75rem;
 }
 
 * {
@@ -78,8 +95,7 @@
 
 html {
   scroll-behavior: smooth;
-  /* anchors clear the fixed header */
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--header-h) + 20px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -87,8 +103,9 @@ body {
   background-color: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
+  font-size: var(--text-body);
+  font-weight: var(--w-body);
+  line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -99,16 +116,27 @@ h3,
 h4,
 .font-display {
   font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
 }
 
-/* Inter is self-hosted at 400 and 600 only — keep emphasis on a real weight
-   instead of letting the browser synthesize a faux bold. */
+h1,
+h2 {
+  font-weight: var(--w-head);
+}
+
+h3,
+h4 {
+  font-weight: var(--w-strong);
+}
+
 strong,
 b {
-  font-weight: 600;
+  font-weight: var(--w-strong);
+}
+
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -116,7 +144,6 @@ b {
   color: var(--color-ink);
 }
 
-/* Visible focus on every interactive thing. */
 :where(a, button, input, textarea, summary, [tabindex]):focus-visible {
   outline: 3px solid var(--color-purple);
   outline-offset: 3px;
@@ -129,7 +156,7 @@ b {
     width: 100%;
     max-width: 1140px;
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    padding-inline: 1.35rem;
   }
   @media (min-width: 768px) {
     .shell {
@@ -144,6 +171,41 @@ b {
     .band {
       padding-block: var(--spacing-section-lg);
     }
+  }
+
+  /* ---------- Section heads ----------
+     Every single-column section uses this: centred, one measure, one gap
+     to the content below. The two-column About section is the deliberate
+     exception and keeps its left-aligned editorial column. */
+  .section-head {
+    max-width: 44rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .section-body {
+    margin-top: var(--head-gap);
+  }
+
+  .eyebrow {
+    font-weight: var(--w-strong);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+  .h-section {
+    font-size: clamp(2.1rem, 6vw, 3.2rem);
+    font-weight: var(--w-head);
+    line-height: 1.08;
+  }
+  .sub-section {
+    margin-top: 0.85rem;
+    margin-inline: auto;
+    max-width: 54ch;
+    font-size: var(--text-body);
+    color: var(--color-ink-soft);
+    line-height: 1.55;
+    text-wrap: balance;
   }
 
   /* ---------- Card system ---------- */
@@ -161,7 +223,7 @@ b {
     box-shadow: var(--card-shadow-sm);
   }
 
-  /* Sticker = card + a little rotation. Used on badges, polaroids, chips. */
+  /* Sticker = card + a little rotation. */
   .sticker {
     transform: rotate(var(--tilt, -2deg));
   }
@@ -172,15 +234,15 @@ b {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 48px;
-    padding: 0.6rem 1.5rem;
+    min-height: 50px;
+    padding: 0.65rem 1.65rem;
     border: var(--card-border-w) solid var(--color-ink);
     border-radius: 999px;
     box-shadow: var(--card-shadow-sm);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 0.95rem;
-    letter-spacing: 0.04em;
+    font-weight: var(--w-head);
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     cursor: pointer;
     transition:
@@ -192,7 +254,6 @@ b {
     transform: translate(-1px, -1px);
     box-shadow: 5px 5px 0 var(--color-ink);
   }
-  /* press-down: button translates into its own shadow */
   .btn:active {
     transform: translate(4px, 4px);
     box-shadow: 0 0 0 var(--color-ink);
@@ -216,33 +277,15 @@ b {
   .pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.35rem 0.9rem;
+    gap: 0.45rem;
+    padding: 0.4rem 1rem;
     border: 2px solid var(--color-ink);
     border-radius: 999px;
     background: var(--color-paper);
     box-shadow: var(--card-shadow-xs);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.85rem;
-    line-height: 1.4;
-  }
-
-  /* ---------- Section headings ---------- */
-  .eyebrow {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 0.78rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-  .h-section {
-    font-size: clamp(1.9rem, 5.5vw, 2.9rem);
-  }
-  .sub-section {
-    color: var(--color-ink-soft);
-    font-size: 1rem;
-    max-width: 46ch;
+    font-weight: var(--w-strong);
+    font-size: 0.95rem;
+    line-height: 1.45;
   }
 
   /* ---------- Form controls inherit the card system ---------- */
@@ -251,9 +294,10 @@ b {
     background: var(--color-paper);
     border: var(--card-border-w) solid var(--color-ink);
     border-radius: var(--card-radius-sm);
-    padding: 0.75rem 1rem;
-    font-family: var(--font-body);
-    font-size: 1rem;
+    padding: 0.8rem 1.05rem;
+    font-family: inherit;
+    font-size: var(--text-body);
+    font-weight: var(--w-body);
     color: var(--color-ink);
     box-shadow: 0 0 0 var(--color-ink);
     transition:
@@ -262,6 +306,7 @@ b {
   }
   .field::placeholder {
     color: #8a8a8a;
+    font-weight: var(--w-body);
   }
   .field:focus {
     outline: none;
@@ -271,6 +316,12 @@ b {
   .field:focus-visible {
     outline: 3px solid var(--color-purple);
     outline-offset: 3px;
+  }
+  .field-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-weight: var(--w-strong);
+    font-size: 0.95rem;
   }
 
   /* ---------- Sticker text: ink outline for display type on photos ---------- */
@@ -288,6 +339,9 @@ b {
   }
   .no-scrollbar {
     scrollbar-width: none;
+  }
+  .text-body-sm {
+    font-size: var(--text-body-sm);
   }
 }
 
@@ -331,7 +385,6 @@ b {
   animation: pp-tick 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Scroll-in reveal: fade + 12px rise, staggered by the component. */
 .reveal {
   opacity: 0;
   transform: translateY(12px);

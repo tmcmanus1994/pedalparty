@@ -4,30 +4,19 @@ import { site } from "@/lib/content";
 import "./globals.css";
 
 /**
- * Fonts are self-hosted (handoff §7) from the woff2 files in the Framer export:
- * Baloo 2 as a variable font (wght 400–800) for display, Inter 400/600 for body.
- * No Google Fonts request at runtime or build time.
+ * Baloo 2 is the ONLY typeface on the site — display and body both. Hierarchy
+ * comes from weight, not from a second family.
+ *
+ * Self-hosted as a single variable file (wght 400–800), subset from the
+ * official Google Fonts release in `Baloo_2/` down to latin + latin-ext plus
+ * the punctuation and arrows the copy uses. ~50 KB for every weight, one
+ * request, no Google Fonts call at build or runtime.
  */
 const baloo = localFont({
-  src: [
-    { path: "./fonts/baloo2-variable-latin.woff2", weight: "400 800", style: "normal" },
-    { path: "./fonts/baloo2-variable-latin-ext.woff2", weight: "400 800", style: "normal" },
-  ],
+  src: [{ path: "./fonts/baloo2-variable.woff2", weight: "400 800", style: "normal" }],
   variable: "--font-baloo",
   display: "swap",
   fallback: ["ui-rounded", "Trebuchet MS", "system-ui", "sans-serif"],
-});
-
-const inter = localFont({
-  src: [
-    { path: "./fonts/inter-400-latin.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/inter-400-latin-ext.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/inter-600-latin.woff2", weight: "600", style: "normal" },
-    { path: "./fonts/inter-600-latin-ext.woff2", weight: "600", style: "normal" },
-  ],
-  variable: "--font-inter",
-  display: "swap",
-  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pedalpartylr.com";
@@ -71,7 +60,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${baloo.variable} ${inter.variable}`}>
+    <html lang="en" className={baloo.variable}>
       <body>{children}</body>
     </html>
   );

@@ -70,22 +70,20 @@ function StatusCard({ ride }: { ride: Ride }) {
   const note = ride.note ?? copy.defaultNote;
 
   return (
-    <div className="card mx-auto max-w-2xl p-6 text-center sm:p-9">
-      <h3 className="font-display text-[clamp(1.35rem,4.6vw,2rem)] leading-tight">
-        {copy.heading}
-      </h3>
-      <p className="mx-auto mt-3 max-w-[46ch] text-[0.95rem] text-ink-soft">{copy.sub}</p>
+    <div className="card mx-auto max-w-2xl p-7 text-center sm:p-10">
+      <h3 className="text-[clamp(1.5rem,4.8vw,2.15rem)] leading-[1.15]">{copy.heading}</h3>
+      <p className="mx-auto mt-3.5 max-w-[46ch] text-ink-soft">{copy.sub}</p>
 
       {note ? (
         <p
-          className="pill sticker mx-auto mt-5 max-w-full !whitespace-normal text-center"
+          className="pill sticker mx-auto mt-6 max-w-full !whitespace-normal text-center"
           style={{ "--tilt": "-1.5deg", background: "#dbf9ff" } as React.CSSProperties}
         >
           {note}
         </p>
       ) : null}
 
-      <div className="mt-7">
+      <div className="mt-8">
         <Countdown target={ride.countdownTarget} label={copy.countdownLabel} />
       </div>
     </div>
@@ -123,8 +121,8 @@ function RideDetailCard({ ride }: { ride: Ride }) {
   ].filter((c): c is string => Boolean(c));
 
   return (
-    <div className="card mx-auto max-w-4xl p-5 sm:p-8">
-      <div className="grid gap-7 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-start lg:gap-9">
+    <div className="card mx-auto max-w-4xl p-6 sm:p-9">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] lg:items-start lg:gap-10">
         {ride.imageUrl ? (
           <Polaroid src={ride.imageUrl} alt={`Flyer for this Monday's ride: ${ride.title ?? ""}`} />
         ) : null}
@@ -133,15 +131,15 @@ function RideDetailCard({ ride }: { ride: Ride }) {
           <p className="eyebrow" style={{ color: "#c40e20" }}>
             THIS MONDAY&rsquo;S RIDE
           </p>
-          <h3 className="mt-1.5 font-display text-[clamp(1.6rem,5vw,2.4rem)] leading-tight text-purple">
+          <h3 className="mt-2 text-[clamp(1.7rem,5vw,2.5rem)] leading-[1.12] text-purple">
             {ride.title}
           </h3>
           {ride.sub ? (
-            <p className="mt-2 max-w-[52ch] text-[0.95rem] text-ink-soft">{ride.sub}</p>
+            <p className="mt-2.5 max-w-[50ch] text-ink-soft">{ride.sub}</p>
           ) : null}
 
           {chips.length ? (
-            <ul className="mt-4 flex flex-wrap gap-2">
+            <ul className="mt-5 flex flex-wrap gap-2.5">
               {chips.map((chip) => (
                 <li key={chip}>
                   <span className="pill">{chip}</span>
@@ -151,21 +149,21 @@ function RideDetailCard({ ride }: { ride: Ride }) {
           ) : null}
 
           {ride.plan?.length ? (
-            <div className="mt-6">
-              <h4 className="font-display text-lg">Da Plan</h4>
-              <ol className="mt-3 space-y-3">
+            <div className="mt-7">
+              <h4 className="text-xl">Da Plan</h4>
+              <ol className="mt-4 space-y-3.5">
                 {ride.plan.map((step, i) => {
                   const s = swatch(i);
                   return (
                     <li key={step} className="flex items-start gap-3">
                       <span
                         aria-hidden="true"
-                        className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink font-display text-sm font-extrabold shadow-[var(--card-shadow-xs)]"
+                        className="mt-[3px] flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold leading-none shadow-[var(--card-shadow-xs)]"
                         style={{ background: s.fill, color: s.on }}
                       >
                         {i + 1}
                       </span>
-                      <span className="text-[0.95rem] leading-snug">{step}</span>
+                      <span className="text-body-sm leading-[1.45]">{step}</span>
                     </li>
                   );
                 })}
@@ -175,14 +173,14 @@ function RideDetailCard({ ride }: { ride: Ride }) {
 
           {ride.alert ? (
             <div
-              className="card-sm mt-6 p-4"
+              className="card-sm mt-7 p-4.5"
               style={{ background: "#dbf9ff" }}
               role="note"
             >
-              <p className="font-display text-sm font-extrabold">
+              <p className="text-[0.95rem] font-extrabold uppercase tracking-[0.05em]">
                 <span aria-hidden="true">⚠️</span> Heads up
               </p>
-              <p className="mt-1 text-[0.95rem] leading-snug">{ride.alert}</p>
+              <p className="mt-1.5 text-body-sm leading-[1.45]">{ride.alert}</p>
             </div>
           ) : null}
         </div>
@@ -195,14 +193,14 @@ export default function NextRide({ ride }: { ride: Ride }) {
   return (
     <section id="next-ride" className="band scroll-mt-24 bg-cream">
       <div className="shell">
-        <Reveal>
-          <h2 className="h-section font-display">
+        <Reveal className="section-head">
+          <h2 className="h-section">
             Next <span style={{ color: "#bc1184" }}>Ride</span>
           </h2>
-          <p className="sub-section mt-2">{nextRideSection.sub}</p>
+          <p className="sub-section">{nextRideSection.sub}</p>
         </Reveal>
 
-        <Reveal delay={80} className="mt-8">
+        <Reveal delay={80} className="section-body">
           {ride.status === "Schedule" ? (
             <RideDetailCard ride={ride} />
           ) : (

@@ -55,31 +55,31 @@ export default function Hero() {
         }}
       />
 
-      <div className="shell relative flex flex-col items-center gap-6 py-20 text-center">
+      <div className="shell relative flex flex-col items-center py-24 text-center">
         <p
-          className="pill sticker !border-[3px] bg-yellow !px-5 !py-2 text-ink"
+          className="pill sticker !border-[3px] !px-5 !py-2 !text-[0.92rem] uppercase tracking-[0.1em] text-ink"
           style={{ "--tilt": "-3deg", background: "#e1c718" } as React.CSSProperties}
         >
           {hero.badge}
         </p>
 
-        <h1 className="text-sticker font-display text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.95]">
+        <h1 className="text-sticker mt-5 text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
           {hero.title}
         </h1>
 
-        <div className="flex flex-col items-center gap-3">
-          <p className="max-w-[26ch] text-balance font-display text-[clamp(1.05rem,3.6vw,1.4rem)] font-bold leading-snug text-white drop-shadow-[0_2px_6px_rgba(34,10,60,0.9)] sm:max-w-[38ch]">
+        <div className="mt-7 flex flex-col items-center gap-4">
+          <p className="max-w-[24ch] text-balance text-[clamp(1.15rem,3.8vw,1.5rem)] font-bold leading-[1.35] text-white drop-shadow-[0_2px_6px_rgba(34,10,60,0.9)] sm:max-w-[36ch]">
             {hero.subtitleLead}
           </p>
           <p
-            className="pill sticker !border-[3px] !px-4 !py-1.5 !text-[clamp(0.95rem,3.4vw,1.15rem)] tracking-[0.08em] text-white"
+            className="pill sticker !border-[3px] !px-5 !py-2 !text-[clamp(1.05rem,3.6vw,1.3rem)] uppercase tracking-[0.08em] text-white"
             style={{ "--tilt": "2deg", background: "#5f13a9" } as React.CSSProperties}
           >
             {hero.subtitleEmphasis}
           </p>
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
           <a href="#next-ride" className="btn btn-primary">
             {hero.primaryCta}
           </a>

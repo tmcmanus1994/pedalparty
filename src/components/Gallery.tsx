@@ -30,7 +30,7 @@ function PlaceholderTile({ index }: { index: number }) {
     >
       <LogoMark className="h-12 w-12" />
       <span
-        className="font-display text-[0.68rem] font-bold uppercase tracking-[0.14em]"
+        className="text-[0.72rem] font-bold uppercase tracking-[0.14em]"
         style={{ color: s.text }}
       >
         Photo coming soon
@@ -108,12 +108,12 @@ export default function Gallery() {
   return (
     <section id="gallery" className="band scroll-mt-24 overflow-hidden bg-cream">
       <div className="shell">
-        <Reveal>
-          <h2 className="h-section font-display">
+        <Reveal className="section-head">
+          <h2 className="h-section">
             {gallery.headingLead}
             <span style={{ color: "#a85f00" }}>{gallery.headingAccent}</span>
           </h2>
-          <p className="sub-section mt-2">{gallery.sub}</p>
+          <p className="sub-section">{gallery.sub}</p>
         </Reveal>
       </div>
 
@@ -128,7 +128,7 @@ export default function Gallery() {
         onMouseLeave={() => (pausedRef.current = false)}
         onFocusCapture={() => (pausedRef.current = true)}
         onBlurCapture={() => (pausedRef.current = false)}
-        className="no-scrollbar mt-9 flex cursor-grab gap-5 overflow-x-auto overscroll-x-contain px-5 py-4 active:cursor-grabbing sm:gap-7 sm:px-8"
+        className="no-scrollbar section-body flex cursor-grab gap-6 overflow-x-auto overscroll-x-contain px-5 py-5 active:cursor-grabbing sm:gap-8 sm:px-8"
         aria-label="Photos from past rides"
       >
         {run.map((photo, i) => {
