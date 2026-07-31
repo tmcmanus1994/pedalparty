@@ -1,0 +1,367 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Pedal Party design system
+   Festival-poster / sticker-sheet: chunky rounded cards, hard
+   offset shadows, thick ink borders, pill buttons, rainbow accents.
+   ============================================================ */
+
+@theme {
+  /* --- Brand spectrum (fills: badges, blocks, chips) --- */
+  --color-magenta: #bc1184;
+  --color-red: #e01226;
+  --color-orange: #e18b12;
+  --color-yellow: #e1c718;
+  --color-green: #33b754;
+  --color-green-deep: #399933;
+  --color-teal: #359fb5;
+  --color-purple: #5f13a9;
+
+  /* --- Text-safe spectrum (>= 4.5:1 on paper/cream) ---
+     Use these whenever an accent carries text on a light background.
+     The bright values above stay for fills, badges and strokes. */
+  --color-magenta-text: #bc1184; /* 5.91:1 */
+  --color-red-text: #c40e20; /* 6.12:1 */
+  --color-orange-text: #a85f00; /* 4.88:1 */
+  --color-yellow-text: #8a6d00; /* 4.92:1 */
+  --color-green-text: #1e7a38; /* 5.39:1 */
+  --color-teal-text: #1f6e80; /* 5.83:1 */
+
+  /* --- Lifted spectrum for text on the purple band (>= 3:1 large) --- */
+  --color-coral-on-purple: #ff7a6e; /* 3.84:1 */
+  --color-lime-on-purple: #5fe07e; /* 5.78:1 */
+  --color-pink-on-purple: #ff7acb; /* 4.13:1 */
+
+  /* --- Surfaces --- */
+  --color-ink: #222222;
+  --color-ink-soft: #4a4a4a;
+  --color-paper: #ffffff;
+  --color-cream: #fffbf4;
+  --color-cream-deep: #fff4e6;
+  --color-peach: #ffe4c7;
+  --color-peach-deep: #fcd3a6;
+  --color-ice: #dbf9ff;
+
+  /* --- Type --- */
+  --font-display: var(--font-baloo), ui-rounded, "Trebuchet MS", system-ui,
+    sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* --- Section rhythm --- */
+  --spacing-section: 5rem;
+  --spacing-section-lg: 7rem;
+}
+
+@theme inline {
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-ink);
+}
+
+/* ============================================================
+   Card / sticker tokens — ONE set, applied everywhere.
+   ============================================================ */
+:root {
+  --card-border-w: 3px;
+  --card-radius: 22px;
+  --card-radius-sm: 14px;
+  --card-shadow-x: 6px;
+  --card-shadow-y: 6px;
+  --card-shadow: var(--card-shadow-x) var(--card-shadow-y) 0 var(--color-ink);
+  --card-shadow-sm: 4px 4px 0 var(--color-ink);
+  --card-shadow-xs: 3px 3px 0 var(--color-ink);
+  --header-h: 60px;
+}
+
+* {
+  border-color: var(--color-ink);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* anchors clear the fixed header */
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+/* Inter is self-hosted at 400 and 600 only — keep emphasis on a real weight
+   instead of letting the browser synthesize a faux bold. */
+strong,
+b {
+  font-weight: 600;
+}
+
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+/* Visible focus on every interactive thing. */
+:where(a, button, input, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@layer components {
+  /* ---------- Layout ---------- */
+  .shell {
+    width: 100%;
+    max-width: 1140px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  .band {
+    padding-block: var(--spacing-section);
+  }
+  @media (min-width: 768px) {
+    .band {
+      padding-block: var(--spacing-section-lg);
+    }
+  }
+
+  /* ---------- Card system ---------- */
+  .card {
+    background: var(--color-paper);
+    border: var(--card-border-w) solid var(--color-ink);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+  }
+
+  .card-sm {
+    background: var(--color-paper);
+    border: var(--card-border-w) solid var(--color-ink);
+    border-radius: var(--card-radius-sm);
+    box-shadow: var(--card-shadow-sm);
+  }
+
+  /* Sticker = card + a little rotation. Used on badges, polaroids, chips. */
+  .sticker {
+    transform: rotate(var(--tilt, -2deg));
+  }
+
+  /* ---------- Buttons: exactly two variants ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0.6rem 1.5rem;
+    border: var(--card-border-w) solid var(--color-ink);
+    border-radius: 999px;
+    box-shadow: var(--card-shadow-sm);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease,
+      background-color 120ms ease;
+  }
+  .btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--color-ink);
+  }
+  /* press-down: button translates into its own shadow */
+  .btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--color-ink);
+  }
+  .btn-primary {
+    background: var(--color-purple);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #6f1cc0;
+  }
+  .btn-secondary {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .btn-secondary:hover {
+    background: var(--color-cream-deep);
+  }
+
+  /* ---------- Pills & chips ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-paper);
+    box-shadow: var(--card-shadow-xs);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  /* ---------- Section headings ---------- */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .h-section {
+    font-size: clamp(1.9rem, 5.5vw, 2.9rem);
+  }
+  .sub-section {
+    color: var(--color-ink-soft);
+    font-size: 1rem;
+    max-width: 46ch;
+  }
+
+  /* ---------- Form controls inherit the card system ---------- */
+  .field {
+    width: 100%;
+    background: var(--color-paper);
+    border: var(--card-border-w) solid var(--color-ink);
+    border-radius: var(--card-radius-sm);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-ink);
+    box-shadow: 0 0 0 var(--color-ink);
+    transition:
+      box-shadow 120ms ease,
+      transform 120ms ease;
+  }
+  .field::placeholder {
+    color: #8a8a8a;
+  }
+  .field:focus {
+    outline: none;
+    box-shadow: var(--card-shadow-sm);
+    transform: translate(-1px, -1px);
+  }
+  .field:focus-visible {
+    outline: 3px solid var(--color-purple);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Sticker text: ink outline for display type on photos ---------- */
+  .text-sticker {
+    color: #fff;
+    -webkit-text-stroke: 3px var(--color-ink);
+    paint-order: stroke fill;
+    text-shadow: 6px 6px 0 var(--color-ink);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* ============================================================
+   Motion
+   ============================================================ */
+@keyframes pp-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pp-tick {
+  0% {
+    transform: translateY(-55%);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: pp-marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+.tick {
+  animation: pp-tick 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Scroll-in reveal: fade + 12px rise, staggered by the component. */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
