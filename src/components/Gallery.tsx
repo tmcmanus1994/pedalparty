@@ -26,13 +26,11 @@ function PlaceholderTile({ index }: { index: number }) {
   return (
     <div
       className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-2.5 rounded-[4px] border-2 border-ink"
-      style={{ background: "#fff6e8", boxShadow: `inset 0 0 0 6px ${s.fill}22` }}
+      style={{ background: "#fff4e6", boxShadow: `inset 0 0 0 6px ${s.fill}` }}
     >
       <LogoMark className="h-12 w-12" />
       <span
-        className="text-[0.72rem] font-bold uppercase tracking-[0.14em]"
-        style={{ color: s.text }}
-      >
+        className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-ink">
         Photo coming soon
       </span>
     </div>
@@ -111,7 +109,7 @@ export default function Gallery() {
         <Reveal className="section-head">
           <h2 className="h-section">
             {gallery.headingLead}
-            <span style={{ color: "#a85f00" }}>{gallery.headingAccent}</span>
+            <span style={{ color: "#e01226" }}>{gallery.headingAccent}</span>
           </h2>
           <p className="sub-section">{gallery.sub}</p>
         </Reveal>

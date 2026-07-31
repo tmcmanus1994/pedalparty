@@ -40,7 +40,7 @@ const STATUS_COPY: Record<Exclude<Ride["status"], "Schedule">, StatusCopy> = {
   RainedOut: {
     heading: (
       <>
-        <span style={{ color: "#c40e20" }}>Rained out!</span>{" "}
+        <span style={{ color: "#e01226" }}>Rained out!</span>{" "}
         <span aria-hidden="true">⛈️</span>
       </>
     ),
@@ -51,7 +51,7 @@ const STATUS_COPY: Record<Exclude<Ride["status"], "Schedule">, StatusCopy> = {
   Hibernating: {
     heading: (
       <>
-        Pedal Party is <span style={{ color: "#1f6e80" }}>hibernating.</span>{" "}
+        Pedal Party is <span style={{ color: "#359fb5" }}>hibernating.</span>{" "}
         <span aria-hidden="true">🐻</span>
       </>
     ),
@@ -77,7 +77,7 @@ function StatusCard({ ride }: { ride: Ride }) {
       {note ? (
         <p
           className="pill sticker mx-auto mt-6 max-w-full !whitespace-normal text-center"
-          style={{ "--tilt": "-1.5deg", background: "#dbf9ff" } as React.CSSProperties}
+          style={{ "--tilt": "-1.5deg", background: "#fff4e6" } as React.CSSProperties}
         >
           {note}
         </p>
@@ -93,7 +93,7 @@ function StatusCard({ ride }: { ride: Ride }) {
 function Polaroid({ src, alt }: { src: string; alt: string }) {
   return (
     <div
-      className="sticker relative mx-auto w-full max-w-[22rem] rounded-[10px] border-[3px] border-ink bg-paper p-3 pb-12 shadow-[var(--card-shadow)] lg:mx-0"
+      className="sticker relative mx-auto w-full max-w-[24rem] rounded-[10px] border-[3px] border-ink bg-paper p-3 pb-12 shadow-[var(--card-shadow)] lg:mx-0"
       style={{ "--tilt": "-3deg" } as React.CSSProperties}
     >
       {/* washi tape */}
@@ -121,14 +121,14 @@ function RideDetailCard({ ride }: { ride: Ride }) {
   ].filter((c): c is string => Boolean(c));
 
   return (
-    <div className="card mx-auto max-w-4xl p-6 sm:p-9">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] lg:items-start lg:gap-10">
+    <div className="card p-6 sm:p-9 lg:p-10">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-center lg:gap-12">
         {ride.imageUrl ? (
           <Polaroid src={ride.imageUrl} alt={`Flyer for this Monday's ride: ${ride.title ?? ""}`} />
         ) : null}
 
         <div className="min-w-0">
-          <p className="eyebrow" style={{ color: "#c40e20" }}>
+          <p className="eyebrow" style={{ color: "#e01226" }}>
             THIS MONDAY&rsquo;S RIDE
           </p>
           <h3 className="mt-2 text-[clamp(1.7rem,5vw,2.5rem)] leading-[1.12] text-purple">
@@ -174,7 +174,7 @@ function RideDetailCard({ ride }: { ride: Ride }) {
           {ride.alert ? (
             <div
               className="card-sm mt-7 p-4.5"
-              style={{ background: "#dbf9ff" }}
+              style={{ background: "#fff4e6" }}
               role="note"
             >
               <p className="text-[0.95rem] font-extrabold uppercase tracking-[0.05em]">

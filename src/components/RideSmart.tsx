@@ -1,6 +1,7 @@
 import Reveal from "./Reveal";
 import { CheckIcon, CrossIcon } from "./Icons";
 import { rideSmart } from "@/lib/content";
+import { BRAND, onBrand } from "@/lib/spectrum";
 
 type ListCardProps = {
   title: string;
@@ -11,26 +12,27 @@ type ListCardProps = {
 
 function ListCard({ title, items, tone, delay }: ListCardProps) {
   const isDo = tone === "do";
-  const chipBg = isDo ? "#33b754" : "#e01226";
-  const chipFg = isDo ? "#222222" : "#ffffff";
-  const headingColor = isDo ? "#1e7a38" : "#c40e20";
+  const chipBg = isDo ? BRAND.green : BRAND.red;
+  const chipFg = onBrand(chipBg);
   const Marker = isDo ? CheckIcon : CrossIcon;
 
   return (
     <Reveal as="li" delay={delay} className="h-full">
       <div className="card flex h-full flex-col p-6 sm:p-7">
-        <div className="flex items-center gap-3">
+        {/* The heading rides on a brand fill rather than being coloured type —
+            green and red are fill colours, and neither carries as text on white. */}
+        <h3
+          className="inline-flex items-center gap-2.5 self-start rounded-full border-[3px] border-ink px-4 py-1.5 text-xl uppercase tracking-[0.06em] shadow-[var(--card-shadow-xs)]"
+          style={{ background: chipBg, color: chipFg }}
+        >
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full border-[3px] border-ink shadow-[var(--card-shadow-xs)]"
-            style={{ background: chipBg, color: chipFg }}
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-paper text-ink"
           >
-            <Marker className="h-4 w-4" />
+            <Marker className="h-3.5 w-3.5" />
           </span>
-          <h3 className="text-2xl uppercase tracking-[0.04em]" style={{ color: headingColor }}>
-            {title}
-          </h3>
-        </div>
+          {title}
+        </h3>
 
         <ul className="mt-6 space-y-3.5">
           {items.map((item) => (
@@ -57,7 +59,7 @@ export default function RideSmart() {
       <div className="shell">
         <Reveal className="section-head">
           <h2 className="h-section">
-            Ride <span style={{ color: "#1e7a38" }}>Smart</span>
+            Ride <span style={{ color: "#5f13a9" }}>Smart</span>
           </h2>
           <p className="sub-section">{rideSmart.sub}</p>
         </Reveal>

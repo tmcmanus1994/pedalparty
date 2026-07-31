@@ -4,7 +4,7 @@ import { useState } from "react";
 import Reveal from "./Reveal";
 import { FacebookIcon, InstagramIcon, MailIcon } from "./Icons";
 import { contact, site } from "@/lib/content";
-import { swatch } from "@/lib/spectrum";
+import { BRAND, onBrand } from "@/lib/spectrum";
 
 const SOCIALS = [
   {
@@ -12,24 +12,24 @@ const SOCIALS = [
     label: "Instagram",
     href: site.instagram,
     Icon: InstagramIcon,
-    fill: "#bc1184",
-    on: "#ffffff",
+    fill: BRAND.magenta,
+    on: onBrand(BRAND.magenta),
   },
   {
     handle: site.facebookHandle,
     label: "Facebook",
     href: site.facebook,
     Icon: FacebookIcon,
-    fill: "#359fb5",
-    on: "#222222",
+    fill: BRAND.teal,
+    on: onBrand(BRAND.teal),
   },
   {
     handle: site.email,
     label: "Email",
     href: `mailto:${site.email}`,
     Icon: MailIcon,
-    fill: "#5f13a9",
-    on: "#ffffff",
+    fill: BRAND.purple,
+    on: onBrand(BRAND.purple),
   },
 ];
 
@@ -62,7 +62,7 @@ export default function Contact() {
       <div className="shell band">
         <Reveal className="section-head">
           <h2 className="h-section">
-            <span style={{ color: "#5f13a9" }}>{contact.headingLead.trim()}</span>{" "}
+            <span style={{ color: BRAND.purple }}>{contact.headingLead.trim()}</span>{" "}
             <span aria-hidden="true">{contact.headingEmoji}</span>
           </h2>
           <p className="sub-section">{contact.sub}</p>
@@ -160,7 +160,6 @@ export default function Contact() {
                   className="btn btn-primary"
                   disabled={status === "sending"}
                   style={{ opacity: status === "sending" ? 0.7 : 1 }}
-                  data-spectrum={swatch(0).name}
                 >
                   {status === "sending" ? "Sending…" : contact.submit}
                 </button>
@@ -168,10 +167,10 @@ export default function Contact() {
                 {/* ⚠️ Placeholder microcopy — final strings TBD (handoff §8 item 4). */}
                 <p aria-live="polite" className="text-body-sm font-bold">
                   {status === "sent" ? (
-                    <span style={{ color: "#1e7a38" }}>{contact.successPlaceholder}</span>
+                    <span className="text-ink">{contact.successPlaceholder}</span>
                   ) : null}
                   {status === "error" ? (
-                    <span style={{ color: "#c40e20" }}>
+                    <span style={{ color: BRAND.red }}>
                       {contact.errorPlaceholder}{" "}
                       <a href={`mailto:${site.email}`} className="underline underline-offset-2">
                         {site.email}

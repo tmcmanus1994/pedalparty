@@ -1,5 +1,12 @@
 import { tickerPhrases } from "@/lib/content";
-import { swatch } from "@/lib/spectrum";
+import { BRAND, BRAND_ON_LIGHT } from "@/lib/spectrum";
+
+/**
+ * Ticker text cycles the brand colours that hold up as type on the white
+ * strip. Orange, green and yellow are fill colours — as words on white they
+ * drop to 2.6:1 or worse, so they carry the strip as the star fill instead.
+ */
+const TICKER_COLORS = Object.values(BRAND_ON_LIGHT);
 
 /**
  * Infinite marquee of value phrases. Each phrase takes the next spectrum
@@ -20,7 +27,7 @@ function Star() {
     >
       <path
         d="M12 1.6l3.1 6.6 7 .95-5.1 4.9 1.3 7.15L12 17.8l-6.3 3.4 1.3-7.15-5.1-4.9 7-.95z"
-        fill="#e1c718"
+        fill={BRAND.yellow}
         stroke="#222"
         strokeWidth="1.6"
         strokeLinejoin="round"
@@ -44,7 +51,7 @@ export default function Ticker() {
               <span key={`${copy}-${i}`} className="flex items-center">
                 <span
                   className="whitespace-nowrap text-[1.3rem] font-extrabold leading-none tracking-[0.02em] sm:text-[1.75rem]"
-                  style={{ color: swatch(i).text }}
+                  style={{ color: TICKER_COLORS[i % TICKER_COLORS.length] }}
                 >
                   {phrase}
                 </span>

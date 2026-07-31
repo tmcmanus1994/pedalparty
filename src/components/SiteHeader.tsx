@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { nav, site } from "@/lib/content";
-import { swatch } from "@/lib/spectrum";
 
 /**
  * Header: email left, "Menu+" right. The trigger cascades a stack of anchor
  * pills beneath it (handoff §3), each staggered ~40ms with a spring pop.
  * Active section highlights; any anchor click closes the menu.
+ *
+ * The menu deliberately sits OUTSIDE the brand accent palette — paper pills
+ * with an ink active state — so navigation never competes with the rainbow.
  */
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -83,7 +85,7 @@ export default function SiteHeader() {
             aria-expanded={open}
             aria-controls="menu-panel"
             className={`pill !px-4 !py-1.5 uppercase tracking-wider transition-transform active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${
-              open ? "bg-purple text-white" : ""
+              open ? "bg-ink text-white" : ""
             }`}
           >
             Menu
@@ -103,7 +105,6 @@ export default function SiteHeader() {
             }`}
           >
             {nav.map((item, i) => {
-              const s = swatch(i);
               const isActive = active === item.href;
               return (
                 <a
@@ -112,10 +113,10 @@ export default function SiteHeader() {
                   onClick={() => setOpen(false)}
                   tabIndex={open ? 0 : -1}
                   aria-current={isActive ? "true" : undefined}
-                  className="pill w-full justify-center !py-2.5 transition-[transform,opacity] duration-300"
+                  className="pill w-full justify-center !py-2.5 transition-[transform,opacity,background-color] duration-300 hover:bg-cream-deep"
                   style={{
-                    background: isActive ? s.fill : "#fff",
-                    color: isActive ? s.on : "#222",
+                    background: isActive ? "#222222" : "#fff",
+                    color: isActive ? "#fff" : "#222",
                     transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
                     transitionDelay: `${(open ? i : nav.length - 1 - i) * 40}ms`,
                     opacity: open ? 1 : 0,

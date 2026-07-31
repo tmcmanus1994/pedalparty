@@ -10,40 +10,26 @@
    ============================================================ */
 
 @theme {
-  /* --- Brand spectrum (fills: badges, blocks, chips) --- */
+  /* --- THE BRAND PALETTE. These seven values and nothing else. ---
+     No darkened variants, no lifted tints. If a colour is unreadable in a
+     given spot, pick a different BRAND colour — never a shade of one.
+     Mirrored in src/lib/spectrum.ts; keep the two in sync. */
+  --color-purple: #5f13a9; /* the main colour */
   --color-magenta: #bc1184;
   --color-red: #e01226;
   --color-orange: #e18b12;
   --color-yellow: #e1c718;
   --color-green: #33b754;
-  --color-green-deep: #399933;
   --color-teal: #359fb5;
-  --color-purple: #5f13a9;
 
-  /* --- Text-safe spectrum (>= 4.5:1 on paper/cream) ---
-     Use these whenever an accent carries text on a light background.
-     The bright values above stay for fills, badges and strokes. */
-  --color-magenta-text: #bc1184; /* 5.91:1 */
-  --color-red-text: #c40e20; /* 6.12:1 */
-  --color-orange-text: #a85f00; /* 4.88:1 */
-  --color-yellow-text: #8a6d00; /* 4.92:1 */
-  --color-green-text: #1e7a38; /* 5.39:1 */
-  --color-teal-text: #1f6e80; /* 5.83:1 */
-
-  /* --- Lifted spectrum for text on the purple band (>= 3:1 large) --- */
-  --color-coral-on-purple: #ff7a6e; /* 3.84:1 */
-  --color-lime-on-purple: #5fe07e; /* 5.78:1 */
-  --color-pink-on-purple: #ff7acb; /* 4.13:1 */
-
-  /* --- Surfaces --- */
+  /* --- Neutral surfaces (structure, not accent) --- */
   --color-ink: #222222;
   --color-ink-soft: #4a4a4a;
   --color-paper: #ffffff;
   --color-cream: #fffbf4;
   --color-cream-deep: #fff4e6;
   --color-peach: #ffe4c7;
-  --color-peach-deep: #fcd3a6;
-  --color-ice: #dbf9ff;
+  --color-ink-faint: #6b6b6b; /* placeholders only */
 
   /* --- Type: one family, weight does the work --- */
   --font-display: var(--font-baloo), ui-rounded, "Trebuchet MS", system-ui,
@@ -260,10 +246,7 @@ p {
   }
   .btn-primary {
     background: var(--color-purple);
-    color: #fff;
-  }
-  .btn-primary:hover {
-    background: #6f1cc0;
+    color: var(--color-paper);
   }
   .btn-secondary {
     background: var(--color-paper);
@@ -305,7 +288,7 @@ p {
       transform 120ms ease;
   }
   .field::placeholder {
-    color: #8a8a8a;
+    color: var(--color-ink-faint);
     font-weight: var(--w-body);
   }
   .field:focus {

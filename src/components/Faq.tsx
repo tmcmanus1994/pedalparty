@@ -17,7 +17,7 @@ export default function Faq() {
       <div className="shell">
         <Reveal className="section-head">
           <h2 className="h-section">
-            Good <span style={{ color: "#1f6e80" }}>Questions</span>
+            Good <span style={{ color: "#359fb5" }}>Questions</span>
           </h2>
           <p className="sub-section">{faq.sub}</p>
         </Reveal>
@@ -38,7 +38,7 @@ export default function Faq() {
                     style={{
                       borderBottomLeftRadius: isOpen ? 0 : undefined,
                       borderBottomRightRadius: isOpen ? 0 : undefined,
-                      background: isOpen ? "#dbf9ff" : "#fff",
+                      background: isOpen ? "#fff4e6" : "#fff",
                     }}
                   >
                     <span>{item.q}</span>
@@ -60,7 +60,7 @@ export default function Faq() {
                   aria-labelledby={`faq-trigger-${i}`}
                   hidden={!isOpen}
                   className="rounded-b-[14px] border-x-[3px] border-b-[3px] border-ink px-5 pb-5 pt-4 shadow-[var(--card-shadow-sm)]"
-                  style={{ background: "#dbf9ff" }}
+                  style={{ background: "#fff4e6" }}
                 >
                   <p className="text-body-sm leading-[1.6]">{item.a}</p>
                 </div>

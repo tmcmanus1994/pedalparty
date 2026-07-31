@@ -69,14 +69,30 @@ Everything visual comes from tokens in `src/app/globals.css`:
   border/shadow/radius.
 - **Two buttons only** — `.btn-primary` (purple fill) and `.btn-secondary`
   (white fill). Both pill, both hard-shadowed, both press into their shadow.
-- **The rainbow has rules** — `src/lib/spectrum.ts` holds one sequence
-  (magenta → red → orange → yellow → green → teal). Every repeated set —
-  countdown blocks, stat badges, ticker words, Da Plan steps, social cards —
-  indexes into it by position. Never hand-pick a colour.
-- **Contrast is built into the palette.** Each swatch carries `fill` (the
-  bright brand value), `on` (a foreground that clears 4.5:1 against that fill)
-  and `text` (a darkened variant for when the accent is itself type on a light
-  background). Yellow never carries text without an ink foreground.
+- **Seven brand colours, and nothing else.** `src/lib/spectrum.ts` is the
+  source of truth: purple `#5F13A9` (the main colour), magenta `#BC1184`,
+  red `#E01226`, orange `#E18B12`, yellow `#E1C718`, green `#33B754`,
+  teal `#359FB5`. No darkened variants, no lifted tints, no one-off hexes.
+  If a colour doesn't work somewhere, **pick a different brand colour** — never
+  a shade of one. (Neutrals — ink, paper, cream, peach — are structure, not
+  accent, and are the only other values in the file.)
+- **One foreground rule** — `onBrand(fill)`: white on every brand fill except
+  yellow, which takes ink. Applied to stat cards, countdown blocks, Da Plan
+  chips, social cards, DO/DON'T headings, everything.
+- **Where each colour can be TYPE.** Not every brand colour is readable as
+  text on every surface, so the file exports two curated sets and code picks
+  from them instead of guessing:
+  - `BRAND_ON_LIGHT` (purple, magenta, red, teal) — section heading accents and
+    the ticker, on cream/paper. Orange, green and yellow drop to 2.6:1 or worse
+    as words on a light surface, so they appear as *fills* there instead.
+  - `BRAND_ON_PURPLE` (yellow, green, orange, teal) — the tagline strip. Red and
+    magenta sit too close to purple to read against it.
+- **The rainbow has an order** — `SPECTRUM` cycles magenta → red → orange →
+  yellow → green → teal. Repeated sets index into it by position. The one
+  exception is the About stat cards, whose six colours are fixed by the client
+  and live in `STAT_FILLS` in `About.tsx`.
+- **The menu is deliberately off-palette** — paper pills with an ink active
+  state — so navigation never competes with the rainbow.
 - **One section rhythm.** Every single-column section uses `.section-head`
   (centred, one measure) and `.section-body` (one gap, `--head-gap`). The
   two-column About section is the deliberate exception and keeps its
@@ -163,5 +179,6 @@ marked with a `⚠️` comment at the exact place in the code.
 | 4 | **Gallery photos.** Final photos come from @pedalpartylr; the strip renders placeholder tiles until then. | `src/components/Gallery.tsx` → `GALLERY_PHOTOS` |
 | 5 | **Form endpoint** needs configuring (Resend key or webhook URL). | `.env.example` |
 | 6 | **Brand logo.** The file labelled `logo.png` in the handoff is the washi-tape texture; the watercolour rainbow mark was not included. The footer/favicon use a drawn placeholder wheel. | `src/components/Icons.tsx` → `LogoMark`, `src/app/icon.svg` |
-| 7 | **OG image** (`public/images/og.png`) was rendered from the placeholder hero. Regenerate it once the real hero photo lands. | `src/app/layout.tsx` |
-| 8 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |
+| 7 | **Stat-card contrast.** The six stat cards use client-specified fills with white text. White on orange, green and teal lands at 2.7:1, 2.6:1 and 3.1:1 — below the 4.5:1 AA floor for the small uppercase labels. Shipped as specified; flagged so the choice is a known one. | `src/components/About.tsx` → `STAT_FILLS` |
+| 8 | **OG image** (`public/images/og.png`) was rendered from the placeholder hero. Regenerate it once the real hero photo lands. | `src/app/layout.tsx` |
+| 9 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |

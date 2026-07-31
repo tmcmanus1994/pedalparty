@@ -1,11 +1,30 @@
 import Reveal from "./Reveal";
 import { about, stats, tagline } from "@/lib/content";
-import { swatch } from "@/lib/spectrum";
+import { BRAND, onBrand } from "@/lib/spectrum";
 
+/**
+ * Stat card colours, client-specified and in stat order. Not the generic
+ * spectrum sequence — these six are fixed, so they live here rather than
+ * being derived from swatch(i).
+ */
+const STAT_FILLS = [
+  BRAND.red, // 2022
+  BRAND.teal, // 15 → 246
+  BRAND.orange, // 4–104
+  BRAND.magenta, // 9 mph
+  BRAND.green, // 5 mi
+  BRAND.yellow, // 45 min — the one that takes ink
+] as const;
+
+/**
+ * The tagline echoes the stat-card palette. Red and magenta are unreadable on
+ * the purple band (1.99:1 and 1.65:1), so this uses the three stat colours
+ * that hold up against purple.
+ */
 const TAGLINE_COLOR: Record<(typeof tagline)[number]["tone"], string> = {
-  coral: "#ff7a6e",
-  lime: "#5fe07e",
-  pink: "#ff7acb",
+  coral: BRAND.orange, // 3.67:1 on purple
+  lime: BRAND.green, // 3.74:1
+  pink: BRAND.yellow, // 5.75:1
 };
 
 export default function About() {
@@ -25,7 +44,7 @@ export default function About() {
               <a
                 href="#contact"
                 className="underline decoration-[3px] underline-offset-4"
-                style={{ color: "#ffd84d" }}
+                style={{ color: BRAND.yellow }}
               >
                 {about.closerLink}
               </a>
@@ -35,15 +54,15 @@ export default function About() {
 
           <ul className="grid grid-cols-2 gap-3 self-center sm:gap-4">
             {stats.map((stat, i) => {
-              const s = swatch(i);
+              const fill = STAT_FILLS[i % STAT_FILLS.length];
               return (
                 <Reveal as="li" key={stat.label} delay={i * 60}>
                   <div
                     className="sticker flex h-full flex-col items-center justify-center rounded-[18px] border-[3px] border-ink px-3 py-5 text-center shadow-[var(--card-shadow-sm)]"
                     style={
                       {
-                        background: s.fill,
-                        color: s.on,
+                        background: fill,
+                        color: onBrand(fill),
                         "--tilt": `${i % 2 === 0 ? -2 : 2}deg`,
                       } as React.CSSProperties
                     }

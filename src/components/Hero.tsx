@@ -67,17 +67,14 @@ export default function Hero() {
           {hero.title}
         </h1>
 
-        <div className="mt-7 flex flex-col items-center gap-4">
-          <p className="max-w-[24ch] text-balance text-[clamp(1.15rem,3.8vw,1.5rem)] font-bold leading-[1.35] text-white drop-shadow-[0_2px_6px_rgba(34,10,60,0.9)] sm:max-w-[36ch]">
-            {hero.subtitleLead}
-          </p>
-          <p
-            className="pill sticker !border-[3px] !px-5 !py-2 !text-[clamp(1.05rem,3.6vw,1.3rem)] uppercase tracking-[0.08em] text-white"
-            style={{ "--tilt": "2deg", background: "#5f13a9" } as React.CSSProperties}
-          >
+        {/* One sentence, one line. "SOCIAL RIDE." stays caps but sits inside the
+            sentence — heavier and in brand yellow rather than a separate pill. */}
+        <p className="mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-white drop-shadow-[0_2px_6px_rgba(34,10,60,0.9)] lg:max-w-none lg:whitespace-nowrap">
+          {hero.subtitleLead}{" "}
+          <span className="font-extrabold tracking-[0.06em]" style={{ color: "#e1c718" }}>
             {hero.subtitleEmphasis}
-          </p>
-        </div>
+          </span>
+        </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
           <a href="#next-ride" className="btn btn-primary">
