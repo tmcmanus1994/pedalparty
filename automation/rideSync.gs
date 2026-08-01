@@ -19,7 +19,7 @@
 // ============================================================================
 var CONFIG = {
   /** Who sends the ride email. Leave "" to accept any sender (not advised). */
-  SENDER: "",
+  SENDER: "tmcmanus1994@gmail.com",
 
   /** Extra Gmail search terms. Narrow this if the sender emails about other things. */
   EXTRA_QUERY: "",
