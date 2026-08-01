@@ -8,6 +8,7 @@ import RideSmart from "@/components/RideSmart";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import Ticker from "@/components/Ticker";
+import { findBrandLogo } from "@/lib/brandLogo";
 import { faq, site } from "@/lib/content";
 import { getRide } from "@/lib/getRide";
 
@@ -16,6 +17,7 @@ export const revalidate = 300;
 
 export default async function Home() {
   const ride = await getRide();
+  const logo = findBrandLogo();
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -39,7 +41,7 @@ export default async function Home() {
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader logo={logo} />
       <main>
         <Hero />
         <Ticker />

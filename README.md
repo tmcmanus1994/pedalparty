@@ -356,6 +356,12 @@ per-frame transform is real work on the weakest hardware. So a phone gets the
 tap-to-play animation and no flight; a desktop gets both. Neither runs under
 `prefers-reduced-motion`, where nothing is fetched at all.
 
+Instead of flying, phones get `HeaderLogo`: the mark fades into the centre of
+the header as the hero empties. Its window is derived from the same span
+`HeroFade` dissolves across, so the two can't drift — the header fills exactly
+as the hero text finishes going. It's `md:hidden`, so it and the flown mark can
+never both occupy that slot, and both stand down while the menu panel is open.
+
 The source export is `Pedal Party.json` at the repo root, 951 KB because After
 Effects embeds its bitmaps as base64 PNG. The served copy is the same file
 with those re-encoded to WebP: 153 KB, no visible difference. **Re-run that

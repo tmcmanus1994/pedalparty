@@ -334,13 +334,18 @@ p {
     font-size: 0.95rem;
   }
 
-  /* The pinned hero logo yields to the open menu panel. */
+  /* Both marks that can sit mid-header yield to the open menu panel: the
+     flown one on desktop, the faded-in one on phones. */
   .scroll-logo {
     transition: opacity 180ms ease;
   }
-  html[data-menu-open="true"] .scroll-logo {
-    opacity: 0;
+  html[data-menu-open="true"] .scroll-logo,
+  html[data-menu-open="true"] .header-logo {
+    opacity: 0 !important;
     pointer-events: none;
+  }
+  .header-logo {
+    transition: opacity 180ms ease;
   }
 
   /* ---------- Hero lift ----------

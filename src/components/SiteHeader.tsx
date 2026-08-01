@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import HeaderLogo from "./HeaderLogo";
 import { MailIcon } from "./Icons";
 import { nav, site } from "@/lib/content";
+import type { BrandLogo } from "@/lib/brandLogo";
 import { BRAND, onBrand } from "@/lib/spectrum";
 
 /**
@@ -13,7 +15,7 @@ import { BRAND, onBrand } from "@/lib/spectrum";
  * Menu pills are paper by default; the active section takes brand purple and
  * hover takes brand yellow (with ink type, per the palette's foreground rule).
  */
-export default function SiteHeader() {
+export default function SiteHeader({ logo }: { logo: BrandLogo | null }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("");
   const [scrolled, setScrolled] = useState(false);
@@ -79,7 +81,8 @@ export default function SiteHeader() {
       }`}
       style={{ minHeight: "var(--header-h)" }}
     >
-      <div className="shell flex h-[var(--header-h)] items-center justify-between gap-3">
+      <div className="shell relative flex h-[var(--header-h)] items-center justify-between gap-3">
+        {logo ? <HeaderLogo logo={logo} /> : null}
         {/* Below 420px the address would run into the pinned logo sitting in
             the middle of the header, so it collapses to its icon. */}
         <a
