@@ -66,7 +66,7 @@ export default function Hero() {
 
       <div className="shell relative flex flex-col items-center py-24 text-center">
         <p
-          className="pill sticker !border-[3px] !px-5 !py-2 !text-[0.92rem] uppercase tracking-[0.1em] text-ink"
+          className="pill sticker hero-lift !border-[3px] !px-5 !py-2 !text-[0.92rem] uppercase tracking-[0.1em] text-ink"
           style={{ "--tilt": "-3deg", background: "#e1c718" } as React.CSSProperties}
         >
           {hero.badge}
@@ -86,11 +86,11 @@ export default function Hero() {
                 height={logo.height}
                 alt={hero.title}
                 fetchPriority="high"
-                className="mx-auto block h-auto w-[min(74vw,24rem,46svh)] max-w-full"
+                className="hero-lift-lg mx-auto block h-auto w-[min(74vw,24rem,46svh)] max-w-full"
               />
             </picture>
           ) : (
-            <span className="text-sticker block text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
+            <span className="text-sticker hero-lift-lg block text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
               {hero.title}
             </span>
           )}
@@ -98,7 +98,7 @@ export default function Hero() {
 
         {/* One sentence, one line. "SOCIAL RIDE." stays caps but sits inside the
             sentence — heavier and in brand purple rather than a separate pill. */}
-        <p className="mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-ink lg:max-w-none lg:whitespace-nowrap">
+        <p className="hero-lift mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-ink lg:max-w-none lg:whitespace-nowrap">
           {hero.subtitleLead}{" "}
           {/* Purple, not the brand yellow — yellow on cream is 1.56:1. */}
           <span className="font-extrabold tracking-[0.06em]" style={{ color: "#5f13a9" }}>
@@ -106,7 +106,7 @@ export default function Hero() {
           </span>
         </p>
 
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
+        <div className="hero-lift mt-9 flex flex-wrap items-center justify-center gap-3.5">
           <a href="#next-ride" className="btn btn-primary">
             {hero.primaryCta}
           </a>

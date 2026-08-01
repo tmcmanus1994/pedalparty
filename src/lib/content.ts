@@ -80,43 +80,38 @@ export const tagline = [
 export const faq = {
   heading: "Good Questions",
   sub: "The plan drops right here (and on our socials) every Saturday at noon.",
-  /**
-   * ⚠️ Questions are verbatim. ANSWERS ARE PLACEHOLDERS — the Framer HTML export
-   * only captured the closed accordion state. Replace every `answer` below with
-   * the real text from the Framer CMS before launch (handoff §4 / §8 item 1).
-   */
   items: [
     {
       q: "When and where do you meet?",
-      a: "PLACEHOLDER — pull verbatim from Framer. We gather at 6:00 PM every Monday and roll out at 6:30. The starting location changes week to week and is announced right here and on our socials every Saturday at noon.",
+      a: "Every Monday, April Fools' Day through Halloween. We gather at 6:00 PM and roll out at 6:30. The location changes weekly — the plan is posted every Saturday morning right here and on our socials.",
     },
     {
       q: "Do I need a fancy bike?",
-      a: "PLACEHOLDER — pull verbatim from Framer. Nope. Any bike that rolls is the right bike. Cruisers, mountain bikes, road bikes, e-bikes, kids' bikes, and the occasional unicycle all show up. Just give your tires and brakes a quick check before you come.",
+      a: "Nope. Just make sure you're safe and ready to roll!",
     },
     {
       q: "How fast and how far do you ride?",
-      a: "PLACEHOLDER — pull verbatim from Framer. The pace is chill — about 9 miles per hour over roughly 5 miles total, and we're never far from the start. If there's a big hill, we wait at the top for everyone.",
+      a: "We average about 9 mph and around 5 miles total, and the route never strays far from the start. If there's a big hill, we wait at the top. Walking your bike up is always fine.",
     },
     {
       q: "May I bring my kids? My dog?",
-      a: "PLACEHOLDER — pull verbatim from Framer. Absolutely. We've had riders from age 4 to 104, and babies in trailers and pups in baskets are regulars. Helmets are strongly encouraged for kids.",
+      a: "Absolutely. We're family-friendly with riders from age 4 to 104. Babies in trailers and pets in baskets are a Pedal Party tradition.",
     },
     {
       q: "What if I can't stay the whole time?",
-      a: "PLACEHOLDER — pull verbatim from Framer. Totally fine. Hakuna matata — do your thing. Peel off whenever you need to; just let someone near you know so we're not looking for you.",
+      a: "Hakuna matata — leave whenever you need to. The route loops close to the start, so dipping out early is easy.",
     },
     {
       q: "Does it cost anything?",
-      a: "PLACEHOLDER — pull verbatim from Framer. The ride is free. You'll want a few bucks for food and drinks at the stops, since supporting local spots is a big part of the point.",
+      a: "Riding with us is free. Bring money if you want food or drinks at the stops.",
     },
     {
       q: "What happens if the weather's bad?",
-      a: "PLACEHOLDER — pull verbatim from Framer. Safety first — if it's storming we'll call it off and post the update right here and on our socials. Light rain usually means we still roll.",
+      a: "If a ride gets rained out, we'll post the cancellation here and on socials. When in doubt, check the Next Ride section.",
     },
     {
       q: "I'm new and nervous. Is this for me?",
-      a: "PLACEHOLDER — pull verbatim from Framer. Yes. Most people show up for their first ride not knowing anybody. Come find a volunteer at the start, say hi, and you'll have people to ride with in about five minutes.",
+      a: "Especially you. Pedal Party exists so that riding around Little Rock feels easy, social, and safe. Show up, say hi, talk to strangers.",
     },
   ],
 } as const;

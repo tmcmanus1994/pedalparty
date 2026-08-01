@@ -195,6 +195,14 @@ function RideDetailCard({ ride }: { ride: Ride }) {
   );
 }
 
+/**
+ * The card for a given ride, whichever state it's in. Exported so the preview
+ * page at /preview/next-ride can render all five side by side.
+ */
+export function RideCard({ ride }: { ride: Ride }) {
+  return ride.status === "Schedule" ? <RideDetailCard ride={ride} /> : <StatusCard ride={ride} />;
+}
+
 export default function NextRide({ ride }: { ride: Ride }) {
   return (
     <section id="next-ride" className="band scroll-mt-24 bg-cream">
@@ -207,11 +215,7 @@ export default function NextRide({ ride }: { ride: Ride }) {
         </Reveal>
 
         <Reveal delay={80} className="section-body">
-          {ride.status === "Schedule" ? (
-            <RideDetailCard ride={ride} />
-          ) : (
-            <StatusCard ride={ride} />
-          )}
+          <RideCard ride={ride} />
         </Reveal>
       </div>
     </section>

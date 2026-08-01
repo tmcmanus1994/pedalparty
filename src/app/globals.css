@@ -334,6 +334,18 @@ p {
     font-size: 0.95rem;
   }
 
+  /* ---------- Hero lift ----------
+     A soft cast shadow under everything in the hero. Uses `filter` rather
+     than box-shadow so it follows the actual shape — the logo's spokes, the
+     pill's rounded ends, the glyphs of the subtitle — and so it layers under
+     the hard offset shadows the pills and buttons already carry. */
+  .hero-lift {
+    filter: drop-shadow(0 5px 10px rgba(34, 34, 34, 0.16));
+  }
+  .hero-lift-lg {
+    filter: drop-shadow(0 12px 26px rgba(34, 34, 34, 0.24));
+  }
+
   /* ---------- Sticker text: ink outline for display type on photos ---------- */
   .text-sticker {
     color: #fff;
@@ -367,17 +379,14 @@ p {
   }
 }
 
+/* Transform only — an opacity fade here makes the seconds digit blink out of
+   existence for ~150ms of every second. */
 @keyframes pp-tick {
-  0% {
-    transform: translateY(-55%);
-    opacity: 0;
+  from {
+    transform: translateY(-58%);
   }
-  55% {
-    opacity: 1;
-  }
-  100% {
+  to {
     transform: translateY(0);
-    opacity: 1;
   }
 }
 

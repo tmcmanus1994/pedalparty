@@ -171,7 +171,10 @@ Next Ride | Image URL
 The last non-empty row wins. If the fetch fails for any reason the site logs it
 and renders the fallback ride rather than erroring.
 
-To preview a state locally, edit `FALLBACK_RIDE.status` in `src/lib/ride.ts`.
+**Previewing the states.** `/preview/next-ride` renders all five on one page
+with live countdowns, labelled with the `Status` value and the handoff letter.
+It is noindex and linked from nowhere. To change what the *homepage* shows
+locally, edit `FALLBACK_RIDE.status` in `src/lib/ride.ts`.
 
 ### The contact form
 
@@ -190,16 +193,20 @@ there, never in a component.
 
 ## ⚠️ Open items before launch
 
-These are the handoff's §8 items plus one found during the build. Each is
-marked with a `⚠️` comment at the exact place in the code.
+Each is marked with a `⚠️` comment at the exact place in the code.
+
+**Social icons.** The three PNGs uploaded to the repo root (`Facebook Icon.png`,
+`Instagram Icon.png`, `Mail Icon.png`) are 36x36 and completely empty — zero
+opaque pixels, and all three are byte-identical, so the export produced blank
+files. The site still uses the drawn SVG icons in `src/components/Icons.tsx`.
+Re-export and they can be swapped in.
 
 | # | Item | Where |
 | - | ---- | ----- |
-| 1 | **FAQ answers are placeholders.** The Framer export only captured the closed accordion, so all 8 answers need pasting in verbatim from the Framer CMS. Questions are correct. | `src/lib/content.ts` → `faq.items[].a` |
-| 2 | **Hero photo.** The handoff never contained one — every `arvib8iyzXyv1UL2qgkJNxQDwhU*.jpg` in the export, including the file labelled `hero-riverfront.jpg`, is Framer's stock placeholder of a kitchen. The hero is currently the logo on a flat field, which may well be the final answer. If a real photo does arrive, set `HERO_PHOTO` and it takes over with a duotone wash and scrim. | `src/components/HeroBackdrop.tsx` |
-| 3 | **Form success/error microcopy is a placeholder.** Travelle to write the real strings. | `src/lib/content.ts` → `contact.successPlaceholder` / `errorPlaceholder` |
-| 4 | **Gallery photos.** Final photos come from @pedalpartylr; the strip renders placeholder tiles until then. | `src/components/Gallery.tsx` → `GALLERY_PHOTOS` |
-| 5 | **Form endpoint** needs configuring (Resend key or webhook URL). | `.env.example` |
-| 6 | **Stat-card contrast.** The six stat cards use client-specified fills with white text. White on orange, green and teal lands at 2.7:1, 2.6:1 and 3.1:1 — below the 4.5:1 AA floor for the small uppercase labels. Shipped as specified; flagged so the choice is a known one. | `src/components/About.tsx` → `STAT_FILLS` |
-| 7 | **OG image** (`public/images/og.png`) is a screenshot of the current hero. Regenerate it if the hero changes — 1200x630 with the header and buttons hidden. | `src/app/layout.tsx` |
-| 8 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |
+| 1 | **Hero photo.** The handoff never contained one — every `arvib8iyzXyv1UL2qgkJNxQDwhU*.jpg` in the export, including the file labelled `hero-riverfront.jpg`, is Framer's stock placeholder of a kitchen. The hero is currently the logo on a flat field, which may well be the final answer. If a real photo does arrive, set `HERO_PHOTO` and it takes over with a duotone wash and scrim. | `src/components/HeroBackdrop.tsx` |
+| 2 | **Form success/error microcopy is a placeholder.** Travelle to write the real strings. | `src/lib/content.ts` → `contact.successPlaceholder` / `errorPlaceholder` |
+| 3 | **Gallery photos.** Final photos come from @pedalpartylr; the strip renders placeholder tiles until then. | `src/components/Gallery.tsx` → `GALLERY_PHOTOS` |
+| 4 | **Form endpoint** needs configuring (Resend key or webhook URL). | `.env.example` |
+| 5 | **Stat-card contrast.** The six stat cards use client-specified fills with white text. White on orange, green and teal lands at 2.7:1, 2.6:1 and 3.1:1 — below the 4.5:1 AA floor for the small uppercase labels. Shipped as specified; flagged so the choice is a known one. | `src/components/About.tsx` → `STAT_FILLS` |
+| 6 | **OG image** (`public/images/og.png`) is a screenshot of the current hero. Regenerate it if the hero changes — 1200x630 with the header and buttons hidden. | `src/app/layout.tsx` |
+| 7 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |
