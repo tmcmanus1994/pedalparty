@@ -155,13 +155,19 @@ function RideDetailCard({ ride }: { ride: Ride }) {
                 {ride.plan.map((step, i) => {
                   const s = swatch(i);
                   return (
-                    <li key={step} className="flex items-start gap-3">
+                    <li key={step} className="flex items-start gap-3.5">
+                      {/* The wrapper is exactly one line box tall, so the
+                          circle centres on line 1 at any font size. */}
                       <span
                         aria-hidden="true"
-                        className="mt-[3px] flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold leading-none shadow-[var(--card-shadow-xs)]"
-                        style={{ background: s.fill, color: s.on }}
+                        className="flex h-[1.45em] shrink-0 items-center text-body-sm"
                       >
-                        {i + 1}
+                        <span
+                          className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold leading-none shadow-[var(--card-shadow-xs)]"
+                          style={{ background: s.fill, color: s.on }}
+                        >
+                          {i + 1}
+                        </span>
                       </span>
                       <span className="text-body-sm leading-[1.45]">{step}</span>
                     </li>
@@ -194,7 +200,7 @@ export default function NextRide({ ride }: { ride: Ride }) {
     <section id="next-ride" className="band scroll-mt-24 bg-cream">
       <div className="shell">
         <Reveal className="section-head">
-          <h2 className="h-section">
+          <h2 className="section-title">
             Next <span style={{ color: "#bc1184" }}>Ride</span>
           </h2>
           <p className="sub-section">{nextRideSection.sub}</p>

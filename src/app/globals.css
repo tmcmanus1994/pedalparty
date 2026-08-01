@@ -37,8 +37,8 @@
   --font-body: var(--font-display);
 
   /* --- Section rhythm --- */
-  --spacing-section: 5.5rem;
-  --spacing-section-lg: 7.5rem;
+  --spacing-section: 3.75rem;
+  --spacing-section-lg: 7rem;
 }
 
 @theme inline {
@@ -72,7 +72,7 @@
   --w-head: 800;
 
   /* the one gap between a section head and its content */
-  --head-gap: 2.75rem;
+  --head-gap: 1.85rem;
 }
 
 * {
@@ -153,7 +153,12 @@ p {
   .band {
     padding-block: var(--spacing-section);
   }
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
+    .band {
+      padding-block: 5.25rem;
+    }
+  }
+  @media (min-width: 1024px) {
     .band {
       padding-block: var(--spacing-section-lg);
     }
@@ -171,6 +176,11 @@ p {
   .section-body {
     margin-top: var(--head-gap);
   }
+  @media (min-width: 1024px) {
+    .section-body {
+      margin-top: 2.75rem;
+    }
+  }
 
   .eyebrow {
     font-weight: var(--w-strong);
@@ -179,13 +189,17 @@ p {
     text-transform: uppercase;
     line-height: 1.3;
   }
-  .h-section {
+  /* NOT `.h-section` — that name collides with Tailwind's `h-*` height
+     utility, which resolves `section` against --spacing-section and pins
+     every heading to a fixed 5.5rem box. */
+  .section-title {
     font-size: clamp(2.1rem, 6vw, 3.2rem);
     font-weight: var(--w-head);
     line-height: 1.08;
+    text-wrap: balance;
   }
   .sub-section {
-    margin-top: 0.85rem;
+    margin-top: 0.7rem;
     margin-inline: auto;
     max-width: 54ch;
     font-size: var(--text-body);

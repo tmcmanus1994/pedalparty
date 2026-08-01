@@ -16,7 +16,7 @@ export default function Faq() {
     <section id="faq" className="band scroll-mt-24 bg-cream">
       <div className="shell">
         <Reveal className="section-head">
-          <h2 className="h-section">
+          <h2 className="section-title">
             Good <span style={{ color: "#359fb5" }}>Questions</span>
           </h2>
           <p className="sub-section">{faq.sub}</p>

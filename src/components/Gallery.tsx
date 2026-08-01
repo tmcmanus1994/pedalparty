@@ -107,7 +107,7 @@ export default function Gallery() {
     <section id="gallery" className="band scroll-mt-24 overflow-hidden bg-cream">
       <div className="shell">
         <Reveal className="section-head">
-          <h2 className="h-section">
+          <h2 className="section-title">
             {gallery.headingLead}
             <span style={{ color: "#e01226" }}>{gallery.headingAccent}</span>
           </h2>

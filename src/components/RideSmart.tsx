@@ -39,10 +39,14 @@ function ListCard({ title, items, tone, delay }: ListCardProps) {
             <li key={item} className="flex items-start gap-3">
               <span
                 aria-hidden="true"
-                className="mt-[3px] flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
-                style={{ background: chipBg, color: chipFg }}
+                className="flex h-[1.45em] shrink-0 items-center text-body-sm"
               >
-                <Marker className="h-3 w-3" />
+                <span
+                  className="flex h-5 w-5 items-center justify-center rounded-full"
+                  style={{ background: chipBg, color: chipFg }}
+                >
+                  <Marker className="h-3 w-3" />
+                </span>
               </span>
               <span className="text-body-sm leading-[1.45]">{item}</span>
             </li>
@@ -58,7 +62,7 @@ export default function RideSmart() {
     <section id="safety" className="band scroll-mt-24 bg-cream">
       <div className="shell">
         <Reveal className="section-head">
-          <h2 className="h-section">
+          <h2 className="section-title">
             Ride <span style={{ color: "#5f13a9" }}>Smart</span>
           </h2>
           <p className="sub-section">{rideSmart.sub}</p>
@@ -71,7 +75,7 @@ export default function RideSmart() {
         </ul>
 
         <Reveal delay={140}>
-          <p className="mx-auto mt-8 max-w-[62ch] text-center text-body-sm text-ink-soft">
+          <p className="mx-auto mt-7 max-w-[62ch] text-center text-body-sm text-ink-soft">
             <span aria-hidden="true">🔧</span> {rideSmart.footnote}
           </p>
         </Reveal>

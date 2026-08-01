@@ -61,7 +61,7 @@ export default function Contact() {
     <section id="contact" className="scroll-mt-24 border-y-[3px] border-ink bg-peach">
       <div className="shell band">
         <Reveal className="section-head">
-          <h2 className="h-section">
+          <h2 className="section-title">
             <span style={{ color: BRAND.purple }}>{contact.headingLead.trim()}</span>{" "}
             <span aria-hidden="true">{contact.headingEmoji}</span>
           </h2>

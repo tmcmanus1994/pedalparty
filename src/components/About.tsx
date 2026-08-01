@@ -30,29 +30,15 @@ const TAGLINE_COLOR: Record<(typeof tagline)[number]["tone"], string> = {
 export default function About() {
   return (
     <section id="about" className="scroll-mt-24 bg-purple text-white">
-      <div className="shell pb-14 pt-[var(--spacing-section)] md:pt-[var(--spacing-section-lg)]">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
-          <Reveal>
-            <h2 className="h-section text-balance">{about.heading}</h2>
-            <div className="mt-5 space-y-4 leading-[1.6] text-white/90">
-              {about.paragraphs.map((p) => (
-                <p key={p.slice(0, 24)}>{p}</p>
-              ))}
-            </div>
-            <p className="mt-7 text-xl font-bold">
-              {about.closerLead}
-              <a
-                href="#contact"
-                className="underline decoration-[3px] underline-offset-4"
-                style={{ color: BRAND.yellow }}
-              >
-                {about.closerLink}
-              </a>
-              {about.closerTail}
-            </p>
+      <div className="shell pb-12 pt-[var(--spacing-section)] lg:pb-14 lg:pt-[var(--spacing-section-lg)]">
+        {/* Mobile reads heading → stats → copy. On lg the stats move into their
+            own column alongside, spanning both rows. */}
+        <div className="grid gap-x-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,25rem)]">
+          <Reveal className="lg:col-start-1 lg:row-start-1">
+            <h2 className="section-title">{about.heading}</h2>
           </Reveal>
 
-          <ul className="grid grid-cols-2 gap-3 self-center sm:gap-4">
+          <ul className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-center">
             {stats.map((stat, i) => {
               const fill = STAT_FILLS[i % STAT_FILLS.length];
               return (
@@ -78,6 +64,25 @@ export default function About() {
               );
             })}
           </ul>
+
+          <Reveal className="mt-9 lg:col-start-1 lg:row-start-2 lg:mt-5">
+            <div className="space-y-4 leading-[1.6] text-white/90">
+              {about.paragraphs.map((p) => (
+                <p key={p.slice(0, 24)}>{p}</p>
+              ))}
+            </div>
+            <p className="mt-7 text-xl font-bold">
+              {about.closerLead}
+              <a
+                href="#contact"
+                className="underline decoration-[3px] underline-offset-4"
+                style={{ color: BRAND.yellow }}
+              >
+                {about.closerLink}
+              </a>
+              {about.closerTail}
+            </p>
+          </Reveal>
         </div>
       </div>
 
