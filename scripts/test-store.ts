@@ -8,6 +8,7 @@
  * project — so it's worth pinning down.
  */
 import { resolveStoredRide, type RideContent } from "../src/lib/ride";
+import { RidePayload } from "../src/lib/ridePayload";
 import type { StoredRide } from "../src/lib/rideStore";
 import { nextSaturdayNoonCentral, centralParts } from "../src/lib/time";
 
@@ -82,6 +83,76 @@ const NOW = Date.parse("2026-08-01T12:00:00.000Z");
   check("next Saturday noon is a Saturday", p.weekday === 6, `weekday ${p.weekday}`);
   check("next Saturday noon is at 12:00 Central", p.hour === 12 && p.minute === 0, iso);
   check("next Saturday noon is in the future", Date.parse(iso) > NOW, iso);
+}
+
+// ---------------------------------------------------------------------------
+// The wire contract. This is the shape documented in the README, so an
+// external automation is writing against these assertions whether it knows it
+// or not — which makes them the thing not to break casually.
+// ---------------------------------------------------------------------------
+
+// The README's worked example, verbatim.
+{
+  const parsed = RidePayload.safeParse({
+    status: "Schedule",
+    title: "Coffee, Views & Pool Tables",
+    sub: "An easy 4.5 miles from downtown coffee to the river and back.",
+    location: "Nexus Coffee Roasters",
+    gatherTime: "Gather 6:00 PM",
+    rollTime: "Roll 6:30 PM",
+    plan: [
+      "Doors open 5:45 at Nexus Coffee Roasters — bring a lock",
+      "6:30 roll out from the River Market park rally point",
+      "Cruise to Rock City Yacht Club for river views — BYOB",
+      "Close out the night at Flying Saucer, basement pool tables",
+    ],
+    alert: "BRING LIGHTS! HELMETS ARE STRONGLY ENCOURAGED!",
+    imageUrl: "https://example.com/flyer.jpg",
+  });
+  check(
+    "the README's example payload validates",
+    parsed.success,
+    parsed.success ? "" : JSON.stringify(parsed.error.issues[0]),
+  );
+  check("plan survives intact", parsed.success && parsed.data.plan?.length === 4);
+}
+
+// Status is the only thing an external caller must send.
+{
+  const parsed = RidePayload.safeParse({ status: "NoRide" });
+  check("status alone is a valid ride", parsed.success);
+}
+
+// Empty strings from a form mean "leave it off the card".
+{
+  const parsed = RidePayload.safeParse({ status: "Schedule", title: "  ", sub: "" });
+  check(
+    "blank fields drop out rather than rendering empty",
+    parsed.success && parsed.data.title === undefined && parsed.data.sub === undefined,
+  );
+}
+
+// Blank plan rows in the console shouldn't become blank bullets on the card.
+{
+  const parsed = RidePayload.safeParse({
+    status: "Schedule",
+    plan: ["Meet at Zaza", "", "  ", "Finish at Stone's Throw"],
+  });
+  check(
+    "blank plan rows are filtered out",
+    parsed.success && parsed.data.plan?.length === 2,
+    parsed.success ? JSON.stringify(parsed.data.plan) : "",
+  );
+}
+
+// A typo in status must fail loudly rather than silently becoming Waiting.
+{
+  const parsed = RidePayload.safeParse({ status: "schedule" });
+  check("a bad status is rejected, not coerced", !parsed.success);
+}
+{
+  const parsed = RidePayload.safeParse({ title: "No status here" });
+  check("a missing status is rejected", !parsed.success);
 }
 
 console.log(failures === 0 ? "\nAll store tests passed." : `\n${failures} test(s) FAILED.`);

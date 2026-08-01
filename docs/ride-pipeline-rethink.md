@@ -1,20 +1,26 @@
 # Pedal Party — rethinking the weekly ride pipeline
 
-> **Resolved — this is now history.** The pipeline described below as "what was
-> built" is gone: Apps Script, Drive and the Google Sheet were deleted, and the
-> ride is published from a password-protected console at `/admin` that reads
-> the post with Claude. See the ride-console section of the root `README.md`.
+> **Resolved — this is now history.** Apps Script, Drive and the Google Sheet
+> were deleted. The ride is published from a password-protected console at
+> `/admin`, and rides arrive from outside through `POST /api/ride`. See the
+> root `README.md`.
 >
-> Of the options in §7 it landed closest to **B** (webhook → app → Claude →
-> storage) with **D**'s human-in-the-loop step: Claude drafts, a person checks
-> the preview and clicks publish. The §8 questions were answered as follows —
-> Claude both extracts *and* writes the title; the ride lives in Vercel Blob as
-> a readable JSON file you can hand-edit; publishing is approve-first; the
-> three-pill model survived, with the extra location and time pushed into plan
-> lines; and email is a later, optional layer behind `/api/ingest`.
+> **Extraction was deliberately kept out of this repo.** Whatever turns the
+> volunteer's post into card fields runs somewhere else and POSTs finished
+> JSON; the site has no model call and no API key. That keeps the site's
+> uptime, its bill, and its deploys independent of the thing doing the
+> reading, and it means the extraction can be rebuilt or replaced without
+> touching the website at all.
+>
+> Against §8: the ride lives in Vercel Blob as a readable JSON file you can
+> hand-edit; publishing is approve-first, with a draft staged for review and a
+> human clicking the button; the three-pill model survived, with the extra
+> location and time pushed into plan lines; and email is one of several things
+> that could sit on the far side of `/api/ride`.
 >
 > The rest of this document is kept as written, because §5 and §6 are the
-> evidence for why the pipeline looks the way it does.
+> evidence for why the card's fields are shaped the way they are — and they
+> remain the spec for whatever does the extraction.
 
 A briefing for a fresh design conversation. Everything needed to reason about
 the problem is in here; no need to read the repo.

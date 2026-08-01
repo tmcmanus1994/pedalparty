@@ -1,4 +1,4 @@
-import { head, put } from "@vercel/blob";
+import { del, head, put } from "@vercel/blob";
 import type { RideContent } from "./ride";
 
 /**
@@ -35,9 +35,19 @@ export type StoredRide = {
   source: string;
 };
 
-/** A pasted post waiting to be turned into a card. Written by the admin or a webhook. */
+/**
+ * A ride waiting for a human to look at it. Written by `/api/ride` with
+ * `draft: true` — typically by whatever does the extraction outside this
+ * project. A draft is never rendered on the site; it only ever shows up in
+ * the console at /admin.
+ */
 export type StoredDraft = {
-  text: string;
+  ride: RideContent;
+  /**
+   * Optional free text for whoever reviews it — judgment calls, anything the
+   * extractor was unsure about. Shown in the console, never on the site.
+   */
+  notes?: string;
   receivedAt: string;
   source: string;
 };
@@ -92,10 +102,12 @@ export function writeDraft(draft: StoredDraft): Promise<void> {
   return writeJson(DRAFT_BLOB, draft);
 }
 
-/**
- * Clear a consumed draft. Blob has no delete-if-exists that's cheaper than
- * overwriting, and an empty draft reads the same as none.
- */
-export function clearDraft(): Promise<void> {
-  return writeJson(DRAFT_BLOB, { text: "", receivedAt: new Date().toISOString(), source: "cleared" });
+/** Drop a draft — published, or discarded from the console. */
+export async function clearDraft(): Promise<void> {
+  if (!storeConfigured()) return;
+  try {
+    await del(DRAFT_BLOB);
+  } catch {
+    // Already gone is the outcome we wanted.
+  }
 }

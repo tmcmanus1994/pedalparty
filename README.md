@@ -214,49 +214,105 @@ To change what the homepage shows, set the status in `/admin`, or edit
 
 ## The ride console (`/admin`)
 
-Password-protected (`ADMIN_PASSWORD`). Paste the volunteer's weekly post,
-Claude reads it into the card's fields, you check the preview — which is the
-real `RideCard`, not a mockup — fix anything that's off, and publish now or
-hold until Saturday noon Central.
+Password-protected (`ADMIN_PASSWORD`). It shows the draft waiting for review
+rendered in the real `RideCard` — not a mockup of it — with every field
+editable, then two buttons: **Publish now**, or **Hold until Saturday noon
+Central**. With no draft the fields start blank and you type the ride in by
+hand; there's also a "Load it into the form" link that pulls in whatever is
+currently live, for fixing a wrong time without retyping the card.
 
-```
-paste post → POST /api/admin/extract → Claude (claude-opus-5, structured
-             outputs) → editable fields + live preview
-           → POST /api/admin/publish → Vercel Blob + cache refresh → live
+The console writes through `POST /api/admin/publish`, which is cookie-gated,
+so the browser never holds `RIDE_SECRET`.
+
+**This project does not read the volunteer's post.** Turning a freeform
+announcement into these fields happens somewhere else entirely — the site
+takes finished JSON and nothing more. There is no model call and no
+`ANTHROPIC_API_KEY` anywhere in it.
+
+## Posting a ride from outside (`POST /api/ride`)
+
+The way an external automation gets a ride into the site. Gated by
+`RIDE_SECRET`; with that unset the route refuses everything.
+
+```jsonc
+{
+  "secret": "<RIDE_SECRET>",   // or send it as an `x-ride-secret` header
+  "draft":  true,              // true = stage for review, false = publish now
+  "source": "extractor",       // optional, free text, shows up in the console
+  "notes":  "Post gave three times; used 6 pm as gather.",  // optional, drafts only
+  "ride": {
+    "status":     "Schedule",  // Schedule | Waiting | NoRide | RainedOut | Hibernating
+    "title":      "Coffee, Views & Pool Tables",
+    "sub":        "An easy 4.5 miles from downtown coffee to the river and back.",
+    "location":   "Nexus Coffee Roasters",   // pill 1 — where riders show up
+    "gatherTime": "Gather 6:00 PM",          // pill 2 — include the word "Gather"
+    "rollTime":   "Roll 6:30 PM",            // pill 3 — include the word "Roll"
+    "plan": [
+      "Doors open 5:45 at Nexus Coffee Roasters — bring a lock",
+      "6:30 roll out from the River Market park rally point",
+      "Cruise to Rock City Yacht Club for river views — BYOB",
+      "Close out the night at Flying Saucer, basement pool tables"
+    ],
+    "alert":    "BRING LIGHTS! HELMETS ARE STRONGLY ENCOURAGED!",
+    "imageUrl": "https://…/flyer.jpg",       // optional
+    "note":     "📝 Taking Labor Day off"    // optional, only renders on NoRide / RainedOut
+  }
+}
 ```
 
-The extraction rules live in the system prompt in `src/lib/extractRide.ts` —
-which pill means what, @handles become venue names, safety callouts merge into
-one line, plan lines stay under ~75 characters, and a title gets written when
-the post doesn't name the ride (it usually doesn't). They're the product
-decisions, so change them deliberately:
+`status` is the only required field inside `ride`. Everything else is
+optional — omit it, or send `""`, and it simply doesn't render. `plan` takes 3
+or 4 lines; keep each under ~75 characters or it wraps badly on a phone.
+
+Staging a draft for review:
 
 ```bash
-npm run test:store             # hold/publish logic, no API key needed
-ANTHROPIC_API_KEY=… npm run test:extract   # the rules, against a real post
+curl -X POST https://pedalpartylr.com/api/ride \
+  -H "content-type: application/json" \
+  -d '{
+    "secret": "'"$RIDE_SECRET"'",
+    "draft": true,
+    "source": "extractor",
+    "ride": {
+      "status": "Schedule",
+      "title": "Coffee, Views & Pool Tables",
+      "location": "Nexus Coffee Roasters",
+      "gatherTime": "Gather 6:00 PM",
+      "rollTime": "Roll 6:30 PM",
+      "plan": ["Doors open 5:45 — bring a lock", "6:30 roll out from River Market park"],
+      "alert": "BRING LIGHTS!"
+    }
+  }'
 ```
 
-`npm run test:extract` runs the hardest real post we have through the live
-model and asserts every rule. When a real post comes out wrong, add it to
-`scripts/` as a case first, then change the prompt.
+→ `{"ok":true,"draft":true}`. Nothing on the site changed; it's waiting in
+`/admin`.
 
-**Why Blob and not KV.** One env var that Vercel injects for you, no
-third-party account, and the stored object is a readable JSON file you can
-open and hand-edit — which keeps the one virtue the old Google Sheet had.
+Send the same body with `"draft": false` to skip review and go straight live:
 
-### Email ingestion (not built)
+→ `{"ok":true,"draft":false,"published":true}` — written, the cached homepage
+dropped, live within seconds.
 
-`POST /api/ingest` with `INGEST_SECRET` stores a post as a *draft*, and
-`/admin` finds it already in the textarea next time it's opened. Nothing
-publishes without a human clicking a button. Wiring up inbound email later
-means pointing a forwarding rule at that URL and changing nothing else.
+| Response | Meaning |
+| --- | --- |
+| `400` | The JSON didn't validate. The body names the offending field. |
+| `401` | Wrong or missing secret. |
+| `503` | `RIDE_SECRET` or `BLOB_READ_WRITE_TOKEN` isn't set on the server. |
+
+Publishing through this route always goes live immediately — holding until
+Saturday noon is a console button, because it's a review decision.
 
 ### On-demand revalidation
 
 `POST /api/revalidate` with `REVALIDATE_SECRET` drops the cached ride and
-re-renders the homepage immediately. Publishing from `/admin` does the same
-thing directly through `src/lib/refresh.ts`; this endpoint is that action for
-callers outside the app.
+re-renders the homepage immediately. Both write paths already do this, so
+this endpoint is only for when you've edited the stored JSON by hand.
+
+### Tests
+
+```bash
+npm run test:store   # hold/publish logic and Central-time maths, no credentials needed
+```
 
 ### The contact form
 

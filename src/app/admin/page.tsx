@@ -39,17 +39,10 @@ export default async function AdminPage() {
     readDraft().catch(() => null),
     readStoredRide().catch(() => null),
   ]);
-  const pending = draft?.text?.trim() ? draft : null;
 
   return (
     <main>
-      <AdminConsole
-        initialPost={pending?.text ?? ""}
-        draft={pending ? { receivedAt: pending.receivedAt, source: pending.source } : null}
-        current={current}
-        storeReady={storeConfigured()}
-        apiKeyReady={Boolean(process.env.ANTHROPIC_API_KEY)}
-      />
+      <AdminConsole draft={draft} current={current} storeReady={storeConfigured()} />
     </main>
   );
 }
