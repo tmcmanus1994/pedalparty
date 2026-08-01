@@ -74,8 +74,15 @@ Free prose works too. This parses correctly:
    `REVALIDATE_SECRET` — any long random string. Redeploy.
 2. Go to [script.google.com](https://script.google.com), signed in as the Pedal
    Party Google account, and create a new project.
-3. Add two files and paste in the contents of `parseRideEmail.js` and
-   `rideSync.gs` from this folder.
+3. Add **exactly two** files and paste in the contents of `parseRideEmail.js`
+   and `rideSync.gs` from this folder.
+
+   Do **not** add `parseRideEmail.test.js` — it runs on your machine, not up
+   there. Apps Script puts every file in one shared global scope, so the test
+   file's copy of the parser name collides with the real one and nothing
+   compiles: `SyntaxError: Identifier 'parseRideEmail' has already been
+   declared`. If you hit that, delete the test file from the project (the ⋮
+   menu beside it in the Files list) and you're back in business.
 4. Fill in `CONFIG` at the top of `rideSync.gs`: `SENDER` (your friend's
    address), `SHEET_ID`, `SITE_URL`, and the same `REVALIDATE_SECRET`.
 5. Run `setUp()` once and grant the permissions it asks for. It creates the

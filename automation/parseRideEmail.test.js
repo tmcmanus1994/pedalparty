@@ -3,6 +3,17 @@
  *
  *     node automation/parseRideEmail.test.js
  *
+ * ⚠️  DO NOT paste this file into Google Apps Script. It runs on your machine
+ * only. Apps Script drops every .gs file into one shared global scope, so this
+ * file's `parseRideEmail` binding collides with the function in
+ * parseRideEmail.gs and the whole project stops compiling:
+ *
+ *     SyntaxError: Identifier 'parseRideEmail' has already been declared
+ *
+ * If you see that, delete this file from the Apps Script project — the ⋮ menu
+ * next to it in the Files list. Only parseRideEmail.js and rideSync.gs belong
+ * up there.
+ *
  * The email format isn't fixed yet, so these cases are the contract. When a
  * real email arrives that parses wrong, add it here first, then fix the parser.
  */
