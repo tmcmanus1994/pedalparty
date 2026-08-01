@@ -347,8 +347,13 @@ rather than hard-coding it, so a re-export with different timing still works.
 
 The static PNG renders first and stays until the player and animation arrive,
 which keeps 164 KB of player and 153 KB of animation off the critical path —
-the hero paints exactly as fast as it did before. Under `prefers-reduced-motion`
-none of it loads.
+the hero paints exactly as fast as it did before.
+
+**Desktop only** (768px and up), and never under `prefers-reduced-motion`. On a
+phone there's no hover to speak of and the mark is small by the time it lands,
+so it isn't worth a player and an animation over a mobile connection — nothing
+is fetched at all there. The mark still flies to the header at every size;
+that's ScrollLogo, not this.
 
 The source export is `Pedal Party.json` at the repo root, 951 KB because After
 Effects embeds its bitmaps as base64 PNG. The served copy is the same file

@@ -24,11 +24,18 @@ import { onLogoProgress } from "@/lib/logoProgress";
  * exactly as fast as it did before this existed. Hovering before it's ready
  * simply does nothing.
  *
- * Under `prefers-reduced-motion` none of it loads and the PNG is the whole
- * story.
+ * Desktop only, and under `prefers-reduced-motion` not at all — in both cases
+ * the PNG is the whole story. On a phone there is no hover to speak of
+ * (`pointerenter` just means "tapped"), and the mark is small enough by the
+ * time it lands that the wheels turning is lost anyway, so it isn't worth a
+ * player and an animation over a mobile connection. The mark still flies to
+ * the header everywhere — that's ScrollLogo's job, not this one's.
  */
 
 const SRC = "/lottie/pedal-party.json";
+
+/** Matches Tailwind's `md`. Below this the mark stays a still picture. */
+const ANIMATE_FROM = 768;
 
 type Player = {
   goToAndStop: (value: number, isFrame?: boolean) => void;
@@ -45,6 +52,10 @@ export default function BrandLottie({ children }: { children: ReactNode }) {
     const mount = holder.current;
     if (!mount) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Decided once, like reduced motion. Crossing the breakpoint mid-session
+    // is rare and the worst it does is leave the animation loaded on a window
+    // that got narrow.
+    if (!window.matchMedia(`(min-width: ${ANIMATE_FROM}px)`).matches) return;
 
     let anim: Player | null = null;
     let dead = false;
