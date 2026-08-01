@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
-import { LogoMark } from "./Icons";
 import { gallery } from "@/lib/content";
 import { swatch } from "@/lib/spectrum";
 
@@ -28,7 +27,15 @@ function PlaceholderTile({ index }: { index: number }) {
       className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-2.5 rounded-[4px] border-2 border-ink"
       style={{ background: "#fff4e6", boxShadow: `inset 0 0 0 6px ${s.fill}` }}
     >
-      <LogoMark className="h-12 w-12" />
+      <img
+        src="/images/logo-mark.png"
+        alt=""
+        aria-hidden="true"
+        width={240}
+        height={236}
+        loading="lazy"
+        className="h-12 w-12 opacity-90"
+      />
       <span
         className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-ink">
         Photo coming soon

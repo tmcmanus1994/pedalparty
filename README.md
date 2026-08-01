@@ -43,7 +43,7 @@ src/
     layout.tsx            fonts + metadata
     page.tsx              composes the one page, reads the ride, emits JSON-LD
     globals.css           the design system (type, tokens, card system, motion)
-    icon.svg              favicon
+    icon.png              favicon (+ apple-icon.png)
     fonts/                self-hosted Baloo 2 variable woff2 (built, see below)
     api/contact/route.ts  contact form handler
   components/             one file per section
@@ -102,6 +102,25 @@ Everything visual comes from tokens in `src/app/globals.css`:
   left-aligned editorial column.
 - **Motion** respects `prefers-reduced-motion` — the ticker, the gallery
   auto-scroll, the countdown tick and every scroll-in reveal all stop.
+
+### The logo
+
+`src/lib/brandLogo.ts` finds the hero logo in `/public/images` at build time and
+Hero.tsx renders it as the `h1`. Two cuts of the mark are in use:
+
+- `logo.png` / `logo.webp` — the **v2** artwork, fully transparent. Used large in
+  the hero. Because the counters of "PEDAL PARTY" are holes, the hero paints a
+  pool of shadow behind it so the lettering reads against a flat field instead
+  of the skyline. On a dark background the letters read dark; that inversion is
+  inherent to the transparent cut.
+- `logo-mark.png` — the **v1** artwork, with the solid interior. Used small, in
+  the footer and on the gallery placeholders, where v2's fine spokes and letter
+  counters would fill in and muddy.
+- `src/app/icon.png` / `apple-icon.png` — favicons, generated from v1 on a
+  square transparent canvas so the round mark isn't cropped.
+
+Source artwork is `Pedal Party.png` (v1) and `Pedal Party v2.png` (v2) at the
+repo root.
 
 ### Rebuilding the font
 
@@ -181,7 +200,6 @@ marked with a `⚠️` comment at the exact place in the code.
 | 3 | **Form success/error microcopy is a placeholder.** Travelle to write the real strings. | `src/lib/content.ts` → `contact.successPlaceholder` / `errorPlaceholder` |
 | 4 | **Gallery photos.** Final photos come from @pedalpartylr; the strip renders placeholder tiles until then. | `src/components/Gallery.tsx` → `GALLERY_PHOTOS` |
 | 5 | **Form endpoint** needs configuring (Resend key or webhook URL). | `.env.example` |
-| 6 | **Brand logo — drop the file in and it appears.** Save the artwork as `public/images/logo.svg` (or `.png` / `.webp`) and the hero swaps the "Pedal Party" wordmark for it automatically at build time — no code change. Other accepted names are listed in `src/lib/brandLogo.ts`. The footer mark and favicon still use a drawn placeholder wheel and want swapping by hand. | `src/lib/brandLogo.ts`, `src/components/Icons.tsx` → `LogoMark`, `src/app/icon.svg` |
-| 7 | **Stat-card contrast.** The six stat cards use client-specified fills with white text. White on orange, green and teal lands at 2.7:1, 2.6:1 and 3.1:1 — below the 4.5:1 AA floor for the small uppercase labels. Shipped as specified; flagged so the choice is a known one. | `src/components/About.tsx` → `STAT_FILLS` |
-| 8 | **OG image** (`public/images/og.png`) was rendered from the placeholder hero. Regenerate it once the real hero photo lands. | `src/app/layout.tsx` |
-| 9 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |
+| 6 | **Stat-card contrast.** The six stat cards use client-specified fills with white text. White on orange, green and teal lands at 2.7:1, 2.6:1 and 3.1:1 — below the 4.5:1 AA floor for the small uppercase labels. Shipped as specified; flagged so the choice is a known one. | `src/components/About.tsx` → `STAT_FILLS` |
+| 7 | **OG image** (`public/images/og.png`) is rendered from the placeholder hero illustration. Regenerate it once the real hero photo lands — screenshot the hero at 1200x630 with the header and buttons hidden. | `src/app/layout.tsx` |
+| 8 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |

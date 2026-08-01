@@ -1,4 +1,4 @@
-import { FacebookIcon, InstagramIcon, LogoMark, MailIcon } from "./Icons";
+import { FacebookIcon, InstagramIcon, MailIcon } from "./Icons";
 import { footer, nav, site } from "@/lib/content";
 
 const SOCIAL_LINKS = [
@@ -11,7 +11,16 @@ export default function SiteFooter() {
   return (
     <footer className="bg-purple text-white">
       <div className="shell flex flex-col items-center gap-7 py-14 text-center">
-        <LogoMark className="h-14 w-14" />
+        {/* The solid-interior logo (v1) — at 64px the transparent version's
+            spokes and letter counters would fill with purple and muddy up. */}
+        <img
+          src="/images/logo-mark.png"
+          alt="Pedal Party"
+          width={240}
+          height={236}
+          loading="lazy"
+          className="h-16 w-16"
+        />
 
         <nav aria-label="Footer">
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">

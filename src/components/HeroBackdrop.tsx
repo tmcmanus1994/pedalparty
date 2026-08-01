@@ -25,7 +25,7 @@ function Cyclist({
   x,
   y,
   scale = 1,
-  color = "#1c0538",
+  color = "#050109",
 }: {
   x: number;
   y: number;
@@ -61,35 +61,35 @@ export default function HeroPoster() {
     >
       <defs>
         <linearGradient id="pp-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2b0857" />
-          <stop offset="26%" stopColor="#6a1f92" />
-          <stop offset="52%" stopColor="#b8408f" />
-          <stop offset="74%" stopColor="#ff8a5c" />
-          <stop offset="90%" stopColor="#ffc178" />
-          <stop offset="100%" stopColor="#ffe3ae" />
+          <stop offset="0%" stopColor="#0e0320" />
+          <stop offset="26%" stopColor="#280751" />
+          <stop offset="52%" stopColor="#4d0f5f" />
+          <stop offset="74%" stopColor="#8a2450" />
+          <stop offset="90%" stopColor="#b8483a" />
+          <stop offset="100%" stopColor="#d4713c" />
         </linearGradient>
         <linearGradient id="pp-river" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#e29b74" />
-          <stop offset="30%" stopColor="#a34a86" />
-          <stop offset="100%" stopColor="#4a1470" />
+          <stop offset="0%" stopColor="#9c5540" />
+          <stop offset="30%" stopColor="#5d1c4b" />
+          <stop offset="100%" stopColor="#1a0630" />
         </linearGradient>
         <linearGradient id="pp-bank" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#3a0a6b" />
-          <stop offset="100%" stopColor="#230546" />
+          <stop offset="0%" stopColor="#1b0435" />
+          <stop offset="100%" stopColor="#0a0117" />
         </linearGradient>
         <radialGradient id="pp-glow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0%" stopColor="#ffd84d" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#ffd84d" stopOpacity="0" />
+          <stop offset="0%" stopColor="#ffb84d" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#ffb84d" stopOpacity="0" />
         </radialGradient>
       </defs>
 
       {/* sky + sun */}
       <rect width="1440" height="662" fill="url(#pp-sky)" />
       <circle cx="760" cy="604" r="230" fill="url(#pp-glow)" />
-      <circle cx="760" cy="604" r="92" fill="#ffdf6b" />
+      <circle cx="760" cy="604" r="78" fill="#e8a14a" opacity="0.85" />
 
       {/* far skyline */}
-      <g fill="#5c1a8a" opacity="0.75">
+      <g fill="#2c0850" opacity="0.7">
         <rect x="30" y="470" width="70" height="192" />
         <rect x="150" y="500" width="54" height="162" />
         <rect x="1230" y="486" width="66" height="176" />
@@ -97,7 +97,7 @@ export default function HeroPoster() {
       </g>
 
       {/* near skyline */}
-      <g fill="#310a5e">
+      <g fill="#14032a">
         <rect x="76" y="404" width="66" height="258" />
         <rect x="152" y="452" width="48" height="210" />
         <rect x="210" y="352" width="78" height="310" />
@@ -114,7 +114,7 @@ export default function HeroPoster() {
       </g>
 
       {/* Junction Bridge — deck, truss, lift towers, piers */}
-      <g stroke="#26063f" strokeWidth="7" fill="none" strokeLinecap="square">
+      <g stroke="#0b0117" strokeWidth="7" fill="none" strokeLinecap="square">
         <path d="M180 496h1120M180 528h1120" />
         <path d="M180 528 220 496 260 528 300 496 340 528 380 496 420 528 460 496 500 528 540 496 580 528 620 496 660 528 700 496 740 528 780 496 820 528 860 496 900 528 940 496 980 528 1020 496 1060 528 1100 496 1140 528 1180 496 1220 528 1260 496 1300 528" />
         <path d="M646 496V366M874 496V366M646 366h228M646 410h228" />
@@ -124,13 +124,13 @@ export default function HeroPoster() {
 
       {/* river */}
       <rect y="662" width="1440" height="150" fill="url(#pp-river)" />
-      <g stroke="#ffe6b8" strokeLinecap="round" opacity="0.5">
+      <g stroke="#e8a878" strokeLinecap="round" opacity="0.32">
         <path d="M690 690h150" strokeWidth="5" />
         <path d="M660 716h215" strokeWidth="4" />
         <path d="M700 742h135" strokeWidth="4" />
         <path d="M640 768h250" strokeWidth="3" />
       </g>
-      <g stroke="#ffd7ad" strokeWidth="3" strokeLinecap="round" opacity="0.3">
+      <g stroke="#c79a7a" strokeWidth="3" strokeLinecap="round" opacity="0.18">
         <path d="M110 700h180M260 734h150M70 768h150M980 706h170M1120 744h190M1010 776h150" />
       </g>
 
@@ -138,10 +138,10 @@ export default function HeroPoster() {
       <path d="M0 792c230-22 430-10 720 8s500 20 720 2v98H0z" fill="url(#pp-bank)" />
       <path
         d="M0 832c230-22 430-10 720 8s500 20 720 2"
-        stroke="#f0b477"
+        stroke="#7a5238"
         strokeWidth="22"
         fill="none"
-        opacity="0.75"
+        opacity="0.65"
         strokeLinecap="round"
       />
 

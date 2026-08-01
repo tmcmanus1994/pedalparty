@@ -24,6 +24,8 @@ const CANDIDATES = [
 
 export type BrandLogo = {
   src: string;
+  /** A same-named .webp sibling, when one exists — served in preference. */
+  webp?: string;
   /** Intrinsic size, when we can read it — lets the browser reserve space. */
   width?: number;
   height?: number;
@@ -54,6 +56,12 @@ export function findBrandLogo(): BrandLogo | null {
     if (!existsSync(file)) continue;
 
     const logo: BrandLogo = { src: `/images/${name}` };
+
+    // Prefer a same-named .webp — the watercolour mark is ~2.5x smaller as
+    // WebP with no visible loss, and it is the hero's LCP element.
+    const webp = name.replace(/\.(png|svg)$/, ".webp");
+    if (webp !== name && existsSync(join(dir, webp))) logo.webp = `/images/${webp}`;
+
     try {
       if (name.endsWith(".svg")) {
         Object.assign(logo, svgSize(readFileSync(file, "utf8")) ?? {});

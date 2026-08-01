@@ -55,33 +55,3 @@ export function CrossIcon({ className = "h-4 w-4" }: IconProps) {
     </svg>
   );
 }
-
-/**
- * Placeholder brand mark — the watercolor rainbow logo from the live site was
- * not included in the handoff assets (the file labelled `logo.png` is the
- * washi-tape texture). Swap in the real artwork when it arrives.
- */
-export function LogoMark({ className = "h-10 w-10" }: IconProps) {
-  const colors = ["#bc1184", "#e01226", "#e18b12", "#e1c718", "#33b754", "#359fb5"];
-  const spokes = Array.from({ length: 12 }, (_, i) => {
-    const angle = (i * 30 - 90) * (Math.PI / 180);
-    return {
-      key: i,
-      color: colors[i % colors.length],
-      x2: 24 + 17.5 * Math.cos(angle),
-      y2: 24 + 17.5 * Math.sin(angle),
-    };
-  });
-
-  return (
-    <svg viewBox="0 0 48 48" className={className} role="img" aria-label="Pedal Party">
-      <circle cx="24" cy="24" r="21" fill="#fff" stroke="#222" strokeWidth="3" />
-      <g strokeWidth="2.8" strokeLinecap="round">
-        {spokes.map((s) => (
-          <line key={s.key} x1="24" y1="24" x2={s.x2} y2={s.y2} stroke={s.color} />
-        ))}
-      </g>
-      <circle cx="24" cy="24" r="4.5" fill="#5f13a9" stroke="#222" strokeWidth="2.5" />
-    </svg>
-  );
-}

@@ -47,13 +47,25 @@ export default function Hero() {
         </>
       ) : null}
 
+      {/* Pool of shadow behind the logo. The v2 mark is fully transparent, so
+          the counters of "PEDAL PARTY" are holes — without this the bridge
+          truss and skyline read straight through the lettering. */}
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-1/2 -z-10 h-[min(76svh,36rem)] w-[min(94vw,36rem)] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle,rgba(8,2,20,0.82) 0%,rgba(8,2,20,0.72) 42%,rgba(8,2,20,0.35) 62%,rgba(8,2,20,0) 74%)",
+        }}
+      />
+
       {/* bottom-weighted scrim for type legibility */}
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(180deg,rgba(34,10,60,0.42) 0%,rgba(34,10,60,0.10) 30%,rgba(34,10,60,0.30) 62%,rgba(34,10,60,0.62) 100%)",
+            "linear-gradient(180deg,rgba(10,2,24,0.55) 0%,rgba(10,2,24,0.28) 32%,rgba(10,2,24,0.45) 66%,rgba(10,2,24,0.75) 100%)",
         }}
       />
 
@@ -69,14 +81,17 @@ export default function Hero() {
             artwork lands in /public/images (see src/lib/brandLogo.ts). */}
         <h1 className="mt-5 w-full">
           {logo ? (
-            <img
-              src={logo.src}
-              width={logo.width}
-              height={logo.height}
-              alt={hero.title}
-              fetchPriority="high"
-              className="mx-auto h-auto max-h-[40svh] w-[min(88vw,40rem)] object-contain drop-shadow-[6px_6px_0_rgba(34,34,34,0.9)]"
-            />
+            <picture>
+              {logo.webp ? <source type="image/webp" srcSet={logo.webp} /> : null}
+              <img
+                src={logo.src}
+                width={logo.width}
+                height={logo.height}
+                alt={hero.title}
+                fetchPriority="high"
+                className="mx-auto h-auto max-h-[46svh] w-[min(74vw,24rem)] object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]"
+              />
+            </picture>
           ) : (
             <span className="text-sticker block text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
               {hero.title}
