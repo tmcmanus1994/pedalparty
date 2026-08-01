@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
+import { setLogoProgress } from "@/lib/logoProgress";
 
 /**
  * The hero logo flies up into the centre of the header as you scroll through
@@ -100,6 +101,10 @@ export default function ScrollLogo({
 
       mover.style.transform =
         `translate3d(${centerX - startW / 2}px, ${centerY - startH / 2}px, 0) scale(${scale})`;
+
+      // The mark's animation scrubs on the same number, so the wheels finish
+      // their turn exactly as it lands in the header (see BrandLottie).
+      setLogoProgress(e);
     };
 
     const onScroll = () => {

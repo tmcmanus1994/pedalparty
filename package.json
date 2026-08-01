@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vercel/blob": "^2.6.1",
+    "lottie-web": "^5.13.0",
     "next": "^15.5.22",
     "react": "19.1.1",
     "react-dom": "19.1.1",

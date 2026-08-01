@@ -314,6 +314,45 @@ this endpoint is only for when you've edited the stored JSON by hand.
 npm run test:store   # hold/publish logic and Central-time maths, no credentials needed
 ```
 
+### The hero backdrop
+
+Two Vimeo videos play behind the hero — a wide cut above 768px, a tall one
+below — through Vimeo's `background=1` mode: autoplay, loop, muted, no
+controls. `dnt=1` asks Vimeo not to set tracking cookies. The player mounts
+after first paint and only ever loads one of the two, so a phone never
+downloads the desktop cut and the video never competes with the hero for
+bandwidth. Under `prefers-reduced-motion` it doesn't load at all.
+
+The hero was designed cream with dark type, so the video sits behind a cream
+veil at 82%. That keeps every contrast decision above it intact: against the
+darkest possible video frame, the body type still measures about 9.2:1.
+
+⚠️ **An iframe can't be `object-fit: cover`d**, so the frame is oversized past
+the hero on whichever axis needs it — and that maths needs each video's real
+shape, which is assumed in `src/components/HeroVideo.tsx`. If either video
+looks squashed or letterboxed, correct its `aspect` there and nothing else
+changes.
+
+### The animated mark
+
+`public/lottie/pedal-party.json` — the wheels turn once. It rests on frame 0,
+plays through once on hover and settles back, and while the mark flies from
+the hero to the header it is scrubbed by that flight, so the turn completes
+exactly as it lands. The file holds still after frame 38, so the scrub maps
+onto the last keyframe rather than the last frame; it reads that from the file
+rather than hard-coding it, so a re-export with different timing still works.
+
+The static PNG renders first and stays until the player and animation arrive,
+which keeps 164 KB of player and 153 KB of animation off the critical path —
+the hero paints exactly as fast as it did before. Under `prefers-reduced-motion`
+none of it loads.
+
+The source export is `Pedal Party.json` at the repo root, 951 KB because After
+Effects embeds its bitmaps as base64 PNG. The served copy is the same file
+with those re-encoded to WebP: 153 KB, no visible difference. **Re-run that
+step when you re-export** — see the ScrollLogo/BrandLottie comments for the
+scrub contract.
+
 ### The contact form
 
 `POST /api/contact` validates the payload, drops honeypot submissions, then
