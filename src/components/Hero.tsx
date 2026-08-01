@@ -1,5 +1,6 @@
 import HeroPoster, { HERO_PHOTO } from "./HeroBackdrop";
 import { hero } from "@/lib/content";
+import { findBrandLogo } from "@/lib/brandLogo";
 
 /**
  * Hero — full-bleed backdrop under a duotone wash (deep purple shadows / warm
@@ -11,6 +12,7 @@ import { hero } from "@/lib/content";
  */
 export default function Hero() {
   const photo = HERO_PHOTO;
+  const logo = findBrandLogo();
 
   return (
     <section className="relative isolate flex min-h-[92svh] items-center justify-center overflow-hidden pt-[var(--header-h)]">
@@ -63,8 +65,23 @@ export default function Hero() {
           {hero.badge}
         </p>
 
-        <h1 className="text-sticker mt-5 text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
-          {hero.title}
+        {/* The logo IS the h1 — the wordmark below is the fallback until the
+            artwork lands in /public/images (see src/lib/brandLogo.ts). */}
+        <h1 className="mt-5 w-full">
+          {logo ? (
+            <img
+              src={logo.src}
+              width={logo.width}
+              height={logo.height}
+              alt={hero.title}
+              fetchPriority="high"
+              className="mx-auto h-auto max-h-[40svh] w-[min(88vw,40rem)] object-contain drop-shadow-[6px_6px_0_rgba(34,34,34,0.9)]"
+            />
+          ) : (
+            <span className="text-sticker block text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
+              {hero.title}
+            </span>
+          )}
         </h1>
 
         {/* One sentence, one line. "SOCIAL RIDE." stays caps but sits inside the

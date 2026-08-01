@@ -6,10 +6,10 @@
 export const site = {
   name: "Pedal Party",
   email: "pedalpartylr@gmail.com",
-  instagram: "https://www.instagram.com/pedalpartylr/",
-  instagramHandle: "@pedalpartylr",
-  facebook: "https://www.facebook.com/pedalpartylr",
-  facebookHandle: "/pedalpartylr",
+  instagram: "https://www.instagram.com/pedalparty_lr",
+  instagramHandle: "@pedalparty_lr",
+  facebook: "https://www.facebook.com/PedalPartyLR",
+  facebookHandle: "/PedalPartyLR",
   city: "Little Rock, AR",
   description:
     "Little Rock's raddest, chillest, most epic, least hyperbolic Monday SOCIAL RIDE. Every Monday, April Fools' to Halloween.",

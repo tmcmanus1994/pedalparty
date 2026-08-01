@@ -285,6 +285,19 @@ p {
     line-height: 1.45;
   }
 
+  /* ---------- Menu pills ----------
+     Default paper, active purple, hover yellow. Colours arrive as custom
+     properties from the component so this :hover rule can win. */
+  .menu-pill {
+    background: var(--pill-bg, var(--color-paper));
+    color: var(--pill-fg, var(--color-ink));
+  }
+  .menu-pill:hover,
+  .menu-pill:focus-visible {
+    background: var(--color-yellow);
+    color: var(--color-ink);
+  }
+
   /* ---------- Form controls inherit the card system ---------- */
   .field {
     width: 100%;

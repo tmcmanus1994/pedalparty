@@ -36,17 +36,15 @@ function ListCard({ title, items, tone, delay }: ListCardProps) {
 
         <ul className="mt-6 space-y-3.5">
           {items.map((item) => (
-            <li key={item} className="flex items-start gap-3">
+            /* items-center: the marker sits at the vertical centre of the
+               whole item, however many lines it wraps to. */
+            <li key={item} className="flex items-center gap-3">
               <span
                 aria-hidden="true"
-                className="flex h-[1.45em] shrink-0 items-center text-body-sm"
+                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+                style={{ background: chipBg, color: chipFg }}
               >
-                <span
-                  className="flex h-5 w-5 items-center justify-center rounded-full"
-                  style={{ background: chipBg, color: chipFg }}
-                >
-                  <Marker className="h-3 w-3" />
-                </span>
+                <Marker className="h-3 w-3" />
               </span>
               <span className="text-body-sm leading-[1.45]">{item}</span>
             </li>
