@@ -2,15 +2,18 @@ import { HERO_PHOTO } from "./HeroBackdrop";
 import { hero } from "@/lib/content";
 import { findBrandLogo } from "@/lib/brandLogo";
 
-/** The hero backdrop when no photo is set. */
-const HERO_BG = "#0e1f1e";
+/** The hero backdrop when no photo is set — the warm cream already in the
+ *  palette (`--color-cream-deep`), a shade deeper than the page below it so
+ *  the two read as separate surfaces. */
+const HERO_BG = "#fff4e6";
 
 /**
  * Hero — the logo on a flat backdrop.
  *
  * The v2 mark is fully transparent, so whatever sits behind it shows through
  * the spokes and the counters of "PEDAL PARTY". A flat field is the point: the
- * lettering reads cleanly and nothing competes with the watercolour.
+ * lettering reads cleanly and nothing competes with the watercolour. On the
+ * cream backdrop those counters read as cream — the mark the way it was drawn.
  *
  * If a real riverfront photo is ever set via HERO_PHOTO, the photo takes over
  * and gets the duotone wash plus a scrim. (HeroBackdrop.tsx still exports the
@@ -94,10 +97,11 @@ export default function Hero() {
         </h1>
 
         {/* One sentence, one line. "SOCIAL RIDE." stays caps but sits inside the
-            sentence — heavier and in brand yellow rather than a separate pill. */}
-        <p className="mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-white lg:max-w-none lg:whitespace-nowrap">
+            sentence — heavier and in brand purple rather than a separate pill. */}
+        <p className="mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-ink lg:max-w-none lg:whitespace-nowrap">
           {hero.subtitleLead}{" "}
-          <span className="font-extrabold tracking-[0.06em]" style={{ color: "#e1c718" }}>
+          {/* Purple, not the brand yellow — yellow on cream is 1.56:1. */}
+          <span className="font-extrabold tracking-[0.06em]" style={{ color: "#5f13a9" }}>
             {hero.subtitleEmphasis}
           </span>
         </p>

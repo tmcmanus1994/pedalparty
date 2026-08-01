@@ -72,9 +72,7 @@ export default function SiteHeader() {
       <div className="shell flex h-[var(--header-h)] items-center justify-between gap-3">
         <a
           href={`mailto:${site.email}`}
-          className={`text-[0.88rem] font-bold tracking-wide underline decoration-2 underline-offset-4 sm:text-[0.95rem] ${
-            scrolled ? "text-purple" : "text-white drop-shadow-[0_1px_3px_rgba(34,34,34,0.85)]"
-          }`}
+          className="text-[0.88rem] font-bold tracking-wide text-purple underline decoration-2 underline-offset-4 sm:text-[0.95rem]"
         >
           {site.email}
         </a>

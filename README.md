@@ -109,10 +109,10 @@ Everything visual comes from tokens in `src/app/globals.css`:
 Hero.tsx renders it as the `h1`. Two cuts of the mark are in use:
 
 - `logo.png` / `logo.webp` — the **v2** artwork, fully transparent. Used large in
-  the hero on a flat `#0E1F1E` field (`HERO_BG` in `Hero.tsx`), which is what
-  shows through the spokes and the counters of "PEDAL PARTY". No shadow on the
-  mark — the flat backdrop is doing the work. Note the letters read dark rather
-  than white; that inversion is inherent to the transparent cut.
+  the hero on a flat creamy-white field (`HERO_BG` in `Hero.tsx`, `#FFF4E6`),
+  which is what shows through the spokes and the counters of "PEDAL PARTY" —
+  so the lettering reads cream, the way the mark was drawn. No shadow on it;
+  the flat backdrop does the work.
 - `logo-mark.png` — the **v1** artwork, with the solid interior. Used small, in
   the footer and on the gallery placeholders, where v2's fine spokes and letter
   counters would fill in and muddy.
