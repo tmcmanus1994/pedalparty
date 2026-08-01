@@ -338,10 +338,11 @@ on a `(min-width: 768px)` media query and give each its own aspect.
 
 ### The animated mark
 
-`public/lottie/pedal-party.json` — the wheels turn once. It rests on frame 0,
-plays through once on hover and settles back, and while the mark flies from
-the hero to the header it is scrubbed by that flight, so the turn completes
-exactly as it lands. The file holds still after frame 38, so the scrub maps
+`public/lottie/pedal-party.json` — the wheels turn once. It rests on frame 0
+and plays through once on hover, or on a tap where there's no mouse. On
+desktop the mark also flies from the hero into the header, and while it does
+the animation is scrubbed by that flight, so the turn completes exactly as it
+lands. The file holds still after frame 38, so the scrub maps
 onto the last keyframe rather than the last frame; it reads that from the file
 rather than hard-coding it, so a re-export with different timing still works.
 
@@ -349,11 +350,11 @@ The static PNG renders first and stays until the player and animation arrive,
 which keeps 164 KB of player and 153 KB of animation off the critical path —
 the hero paints exactly as fast as it did before.
 
-**Desktop only** (768px and up), and never under `prefers-reduced-motion`. On a
-phone there's no hover to speak of and the mark is small by the time it lands,
-so it isn't worth a player and an animation over a mobile connection — nothing
-is fetched at all there. The mark still flies to the header at every size;
-that's ScrollLogo, not this.
+**The flight is desktop only** (768px and up). On a phone the mark stays in
+the hero and scrolls away — the header is already crowded there, and a
+per-frame transform is real work on the weakest hardware. So a phone gets the
+tap-to-play animation and no flight; a desktop gets both. Neither runs under
+`prefers-reduced-motion`, where nothing is fetched at all.
 
 The source export is `Pedal Party.json` at the repo root, 951 KB because After
 Effects embeds its bitmaps as base64 PNG. The served copy is the same file

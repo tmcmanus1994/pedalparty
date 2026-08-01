@@ -24,18 +24,19 @@ import { onLogoProgress } from "@/lib/logoProgress";
  * exactly as fast as it did before this existed. Hovering before it's ready
  * simply does nothing.
  *
- * Desktop only, and under `prefers-reduced-motion` not at all — in both cases
- * the PNG is the whole story. On a phone there is no hover to speak of
- * (`pointerenter` just means "tapped"), and the mark is small enough by the
- * time it lands that the wheels turning is lost anyway, so it isn't worth a
- * player and an animation over a mobile connection. The mark still flies to
- * the header everywhere — that's ScrollLogo's job, not this one's.
+ * Hover is a mouse idea, so touch gets the equivalent gesture: a tap plays it
+ * through once. They're kept on separate events rather than both riding
+ * `pointerenter`, because after a tap a touch target stays "entered" until you
+ * touch something else — so a second tap would do nothing.
+ *
+ * On a phone the mark never flies (see ScrollLogo), so there is no scrub
+ * there; tapping is the whole interaction.
+ *
+ * Under `prefers-reduced-motion` none of it loads and the PNG is the whole
+ * story.
  */
 
 const SRC = "/lottie/pedal-party.json";
-
-/** Matches Tailwind's `md`. Below this the mark stays a still picture. */
-const ANIMATE_FROM = 768;
 
 type Player = {
   goToAndStop: (value: number, isFrame?: boolean) => void;
@@ -52,10 +53,6 @@ export default function BrandLottie({ children }: { children: ReactNode }) {
     const mount = holder.current;
     if (!mount) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Decided once, like reduced motion. Crossing the breakpoint mid-session
-    // is rare and the worst it does is leave the animation loaded on a window
-    // that got narrow.
-    if (!window.matchMedia(`(min-width: ${ANIMATE_FROM}px)`).matches) return;
 
     let anim: Player | null = null;
     let dead = false;
@@ -118,18 +115,29 @@ export default function BrandLottie({ children }: { children: ReactNode }) {
       }
     })();
 
-    const onEnter = () => {
+    const play = () => {
       if (!anim || playing) return;
       if (progress > 0.001 && progress < 0.999) return; // mid-flight; scroll owns it
       playing = true;
       anim.goToAndPlay(0, true);
     };
 
+    /** Mouse: hovering is the gesture. */
+    const onEnter = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") play();
+    };
+    /** Touch and pen: the tap is. */
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") play();
+    };
+
     mount.addEventListener("pointerenter", onEnter);
+    mount.addEventListener("pointerup", onUp);
 
     return () => {
       dead = true;
       mount.removeEventListener("pointerenter", onEnter);
+      mount.removeEventListener("pointerup", onUp);
       unsubscribe?.();
       anim?.destroy();
     };

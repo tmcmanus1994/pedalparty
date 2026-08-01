@@ -40,6 +40,14 @@ function pinnedHeight() {
 }
 
 /**
+ * Below this the mark doesn't fly at all — it stays in the hero and scrolls
+ * away like everything else. Matches Tailwind's `md`. On a phone the header is
+ * already crowded, the flight is a lot of per-frame work on the weakest
+ * hardware, and the mark is tiny by the time it would land.
+ */
+const FLY_FROM = 768;
+
+/**
  * Smoothstep. Gentle at both ends, so the mark tracks the page naturally as it
  * leaves the hero and settles into the header rather than darting up front.
  */
@@ -64,6 +72,7 @@ export default function ScrollLogo({
     const mover = moverRef.current;
     if (!spacer || !mover) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.matchMedia(`(min-width: ${FLY_FROM}px)`).matches) return;
 
     const headerH =
       parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 64;
@@ -127,7 +136,8 @@ export default function ScrollLogo({
     // Same z as the fixed header but later in the DOM, so the mark paints on
     // top of the header's background instead of behind it.
     mover.style.zIndex = "50";
-    spacer.style.visibility = "visible";
+    // The mark has left the flow, so the spacer takes over its box.
+    spacer.style.display = "block";
     measure();
     paint();
 
@@ -157,12 +167,15 @@ export default function ScrollLogo({
 
   return (
     <>
-      {/* Holds the hero layout open once the mark goes fixed. */}
+      {/* Holds the hero layout open once the mark goes fixed — and only then.
+          It starts collapsed so that when the flight doesn't run at all (a
+          phone, or reduced motion) the hero doesn't carry a logo-sized hole
+          above a logo. */}
       <div
         ref={spacerRef}
         aria-hidden="true"
         className="mx-auto w-[min(74vw,24rem,46svh)] max-w-full"
-        style={{ aspectRatio: String(aspect) }}
+        style={{ aspectRatio: String(aspect), display: "none" }}
       />
       {/* Decorative once it moves — the <h1> carries the name. */}
       <div
