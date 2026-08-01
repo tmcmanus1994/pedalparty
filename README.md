@@ -50,7 +50,8 @@ src/
   lib/
     content.ts            ALL copy, verbatim
     ride.ts               Next Ride state machine + Google Sheet reader
-    spectrum.ts           the rainbow, with rules
+    spectrum.ts           the brand palette, with rules
+    brandLogo.ts          finds the hero logo in /public/images at build time
     time.ts               Central-time helpers
 Baloo_2/                  official Google Fonts release — OFL licence + source TTF
 ```
@@ -91,8 +92,10 @@ Everything visual comes from tokens in `src/app/globals.css`:
   yellow → green → teal. Repeated sets index into it by position. The one
   exception is the About stat cards, whose six colours are fixed by the client
   and live in `STAT_FILLS` in `About.tsx`.
-- **The menu is deliberately off-palette** — paper pills with an ink active
-  state — so navigation never competes with the rainbow.
+- **The menu** is paper by default, brand purple for the active section and
+  brand yellow on hover. Its colours travel as custom properties (`--pill-bg` /
+  `--pill-fg`) so the `:hover` rule in `globals.css` can win — an inline
+  background would beat it.
 - **One section rhythm.** Every single-column section uses `.section-head`
   (centred, one measure) and `.section-body` (one gap, `--head-gap`). The
   two-column About section is the deliberate exception and keeps its
