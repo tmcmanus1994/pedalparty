@@ -1,37 +1,42 @@
-import HeroPoster, { HERO_PHOTO } from "./HeroBackdrop";
+import { HERO_PHOTO } from "./HeroBackdrop";
 import { hero } from "@/lib/content";
 import { findBrandLogo } from "@/lib/brandLogo";
 
+/** The hero backdrop when no photo is set. */
+const HERO_BG = "#0e1f1e";
+
 /**
- * Hero — full-bleed backdrop under a duotone wash (deep purple shadows / warm
- * highlight) plus a bottom-weighted scrim, so the badge, title and buttons pop
- * while the scene behind them stays readable.
+ * Hero — the logo on a flat backdrop.
  *
- * The backdrop is the poster illustration until the real riverfront photo
- * arrives — see HeroBackdrop.tsx for the one-line swap.
+ * The v2 mark is fully transparent, so whatever sits behind it shows through
+ * the spokes and the counters of "PEDAL PARTY". A flat field is the point: the
+ * lettering reads cleanly and nothing competes with the watercolour.
+ *
+ * If a real riverfront photo is ever set via HERO_PHOTO, the photo takes over
+ * and gets the duotone wash plus a scrim. (HeroBackdrop.tsx still exports the
+ * poster illustration that used to fill this slot, kept in case it's wanted
+ * back — nothing imports it today.)
  */
 export default function Hero() {
   const photo = HERO_PHOTO;
   const logo = findBrandLogo();
 
   return (
-    <section className="relative isolate flex min-h-[92svh] items-center justify-center overflow-hidden pt-[var(--header-h)]">
-      {photo ? (
-        <img
-          src={`/images/${photo.base}-${photo.widths[photo.widths.length - 1]}.jpg`}
-          srcSet={photo.widths.map((w) => `/images/${photo.base}-${w}.jpg ${w}w`).join(", ")}
-          sizes="100vw"
-          alt={photo.alt}
-          fetchPriority="high"
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
-        />
-      ) : (
-        <HeroPoster />
-      )}
-
-      {/* duotone wash — only meaningful over a photo */}
+    <section
+      className="relative isolate flex min-h-[92svh] items-center justify-center overflow-hidden pt-[var(--header-h)]"
+      style={photo ? undefined : { background: HERO_BG }}
+    >
       {photo ? (
         <>
+          <img
+            src={`/images/${photo.base}-${photo.widths[photo.widths.length - 1]}.jpg`}
+            srcSet={photo.widths.map((w) => `/images/${photo.base}-${w}.jpg ${w}w`).join(", ")}
+            sizes="100vw"
+            alt={photo.alt}
+            fetchPriority="high"
+            className="absolute inset-0 -z-20 h-full w-full object-cover"
+          />
+          {/* duotone wash — only meaningful over a photo */}
           <div
             aria-hidden="true"
             className="absolute inset-0 -z-10 mix-blend-multiply"
@@ -44,30 +49,17 @@ export default function Hero() {
               background: "linear-gradient(180deg,#ffdca8 0%,#ff9d5c 55%,#2a0a4a 100%)",
             }}
           />
+          {/* bottom-weighted scrim for type legibility */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10"
+            style={{
+              background:
+                "linear-gradient(180deg,rgba(10,2,24,0.55) 0%,rgba(10,2,24,0.28) 32%,rgba(10,2,24,0.45) 66%,rgba(10,2,24,0.75) 100%)",
+            }}
+          />
         </>
       ) : null}
-
-      {/* Pool of shadow behind the logo. The v2 mark is fully transparent, so
-          the counters of "PEDAL PARTY" are holes — without this the bridge
-          truss and skyline read straight through the lettering. */}
-      <div
-        aria-hidden="true"
-        className="absolute left-1/2 top-1/2 -z-10 h-[min(76svh,36rem)] w-[min(94vw,36rem)] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle,rgba(8,2,20,0.82) 0%,rgba(8,2,20,0.72) 42%,rgba(8,2,20,0.35) 62%,rgba(8,2,20,0) 74%)",
-        }}
-      />
-
-      {/* bottom-weighted scrim for type legibility */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            "linear-gradient(180deg,rgba(10,2,24,0.55) 0%,rgba(10,2,24,0.28) 32%,rgba(10,2,24,0.45) 66%,rgba(10,2,24,0.75) 100%)",
-        }}
-      />
 
       <div className="shell relative flex flex-col items-center py-24 text-center">
         <p
@@ -77,19 +69,21 @@ export default function Hero() {
           {hero.badge}
         </p>
 
-        {/* The logo IS the h1 — the wordmark below is the fallback until the
-            artwork lands in /public/images (see src/lib/brandLogo.ts). */}
+        {/* The logo IS the h1 — the wordmark is the fallback if no artwork is
+            present in /public/images (see src/lib/brandLogo.ts). */}
         <h1 className="mt-5 w-full">
           {logo ? (
             <picture>
               {logo.webp ? <source type="image/webp" srcSet={logo.webp} /> : null}
+              {/* Near-square (623x613), so capping the width by 46svh also caps
+                  its height on short viewports. */}
               <img
                 src={logo.src}
                 width={logo.width}
                 height={logo.height}
                 alt={hero.title}
                 fetchPriority="high"
-                className="mx-auto h-auto max-h-[46svh] w-[min(74vw,24rem)] object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]"
+                className="mx-auto block h-auto w-[min(74vw,24rem,46svh)] max-w-full"
               />
             </picture>
           ) : (
@@ -101,7 +95,7 @@ export default function Hero() {
 
         {/* One sentence, one line. "SOCIAL RIDE." stays caps but sits inside the
             sentence — heavier and in brand yellow rather than a separate pill. */}
-        <p className="mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-white drop-shadow-[0_2px_6px_rgba(34,10,60,0.9)] lg:max-w-none lg:whitespace-nowrap">
+        <p className="mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-white lg:max-w-none lg:whitespace-nowrap">
           {hero.subtitleLead}{" "}
           <span className="font-extrabold tracking-[0.06em]" style={{ color: "#e1c718" }}>
             {hero.subtitleEmphasis}

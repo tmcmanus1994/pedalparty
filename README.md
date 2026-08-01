@@ -109,10 +109,10 @@ Everything visual comes from tokens in `src/app/globals.css`:
 Hero.tsx renders it as the `h1`. Two cuts of the mark are in use:
 
 - `logo.png` / `logo.webp` — the **v2** artwork, fully transparent. Used large in
-  the hero. Because the counters of "PEDAL PARTY" are holes, the hero paints a
-  pool of shadow behind it so the lettering reads against a flat field instead
-  of the skyline. On a dark background the letters read dark; that inversion is
-  inherent to the transparent cut.
+  the hero on a flat `#0E1F1E` field (`HERO_BG` in `Hero.tsx`), which is what
+  shows through the spokes and the counters of "PEDAL PARTY". No shadow on the
+  mark — the flat backdrop is doing the work. Note the letters read dark rather
+  than white; that inversion is inherent to the transparent cut.
 - `logo-mark.png` — the **v1** artwork, with the solid interior. Used small, in
   the footer and on the gallery placeholders, where v2's fine spokes and letter
   counters would fill in and muddy.
@@ -196,10 +196,10 @@ marked with a `⚠️` comment at the exact place in the code.
 | # | Item | Where |
 | - | ---- | ----- |
 | 1 | **FAQ answers are placeholders.** The Framer export only captured the closed accordion, so all 8 answers need pasting in verbatim from the Framer CMS. Questions are correct. | `src/lib/content.ts` → `faq.items[].a` |
-| 2 | **Hero photo is missing from the handoff.** Every `arvib8iyzXyv1UL2qgkJNxQDwhU*.jpg` in the export — including the file labelled `hero-riverfront.jpg` — is Framer's stock placeholder of a kitchen, not the riverfront. The hero currently renders a poster-style illustration instead. | `src/components/HeroBackdrop.tsx` → set `HERO_PHOTO` |
+| 2 | **Hero photo.** The handoff never contained one — every `arvib8iyzXyv1UL2qgkJNxQDwhU*.jpg` in the export, including the file labelled `hero-riverfront.jpg`, is Framer's stock placeholder of a kitchen. The hero is currently the logo on a flat field, which may well be the final answer. If a real photo does arrive, set `HERO_PHOTO` and it takes over with a duotone wash and scrim. | `src/components/HeroBackdrop.tsx` |
 | 3 | **Form success/error microcopy is a placeholder.** Travelle to write the real strings. | `src/lib/content.ts` → `contact.successPlaceholder` / `errorPlaceholder` |
 | 4 | **Gallery photos.** Final photos come from @pedalpartylr; the strip renders placeholder tiles until then. | `src/components/Gallery.tsx` → `GALLERY_PHOTOS` |
 | 5 | **Form endpoint** needs configuring (Resend key or webhook URL). | `.env.example` |
 | 6 | **Stat-card contrast.** The six stat cards use client-specified fills with white text. White on orange, green and teal lands at 2.7:1, 2.6:1 and 3.1:1 — below the 4.5:1 AA floor for the small uppercase labels. Shipped as specified; flagged so the choice is a known one. | `src/components/About.tsx` → `STAT_FILLS` |
-| 7 | **OG image** (`public/images/og.png`) is rendered from the placeholder hero illustration. Regenerate it once the real hero photo lands — screenshot the hero at 1200x630 with the header and buttons hidden. | `src/app/layout.tsx` |
+| 7 | **OG image** (`public/images/og.png`) is a screenshot of the current hero. Regenerate it if the hero changes — 1200x630 with the header and buttons hidden. | `src/app/layout.tsx` |
 | 8 | **Stat vs. prose mismatch** (carried over from the live site, not introduced here): the About copy says "a record 185 at our 100th" while the stat badge says `15 → 246`. Both are verbatim from the handoff — worth deciding which number is current. | `src/lib/content.ts` |
