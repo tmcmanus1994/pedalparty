@@ -171,10 +171,17 @@ Next Ride | Image URL
 The last non-empty row wins. If the fetch fails for any reason the site logs it
 and renders the fallback ride rather than erroring.
 
-**Previewing the states.** `/preview/next-ride` renders all five on one page
-with live countdowns, labelled with the `Status` value and the handoff letter.
-It is noindex and linked from nowhere. To change what the *homepage* shows
-locally, edit `FALLBACK_RIDE.status` in `src/lib/ride.ts`.
+**Previewing the states.** Two ways, both driven by the same component
+(`src/components/RideStates.tsx`), so they can't drift apart:
+
+- `PREVIEW_ALL_STATES` in `src/components/NextRide.tsx` — **currently `true`**,
+  which makes the homepage's Next Ride section stack all five states, labelled,
+  instead of showing one. ⚠️ Set it back to `false` before launch.
+- `/preview/next-ride` — the same view on its own noindex page, linked from
+  nowhere. Stays useful after the homepage flag goes back to `false`.
+
+To change what the homepage shows once the flag is off, set the `Status` column
+in the sheet, or edit `FALLBACK_RIDE.status` in `src/lib/ride.ts` locally.
 
 ### The contact form
 

@@ -1,5 +1,6 @@
 import Countdown from "./Countdown";
 import Reveal from "./Reveal";
+import RideStatesPreview from "./RideStates";
 import { nextRideSection } from "@/lib/content";
 import { swatch } from "@/lib/spectrum";
 import type { Ride } from "@/lib/ride";
@@ -203,6 +204,15 @@ export function RideCard({ ride }: { ride: Ride }) {
   return ride.status === "Schedule" ? <RideDetailCard ride={ride} /> : <StatusCard ride={ride} />;
 }
 
+/**
+ * ⚠️ REVIEW MODE — set this back to `false` before launch.
+ *
+ * `true`  → the section stacks all five states, labelled, for review.
+ * `false` → the section shows the one state the sheet's `Status` selects,
+ *           which is the real behaviour.
+ */
+export const PREVIEW_ALL_STATES = true;
+
 export default function NextRide({ ride }: { ride: Ride }) {
   return (
     <section id="next-ride" className="band scroll-mt-24 bg-cream">
@@ -211,11 +221,15 @@ export default function NextRide({ ride }: { ride: Ride }) {
           <h2 className="section-title">
             Next <span style={{ color: "#bc1184" }}>Ride</span>
           </h2>
-          <p className="sub-section">{nextRideSection.sub}</p>
+          <p className="sub-section">
+            {PREVIEW_ALL_STATES
+              ? "REVIEW MODE — all five states shown below with live countdowns. Only one of these renders on the real site, chosen by the Status column in the ride sheet."
+              : nextRideSection.sub}
+          </p>
         </Reveal>
 
         <Reveal delay={80} className="section-body">
-          <RideCard ride={ride} />
+          {PREVIEW_ALL_STATES ? <RideStatesPreview /> : <RideCard ride={ride} />}
         </Reveal>
       </div>
     </section>

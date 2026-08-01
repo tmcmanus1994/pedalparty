@@ -60,7 +60,10 @@ export default function Countdown({
             style={{ background: s.fill, color: s.on }}
           >
             <span className="overflow-hidden text-[clamp(1.5rem,7.5vw,2.5rem)] font-extrabold leading-none tabular-nums">
-              <span key={display} className="tick block">
+              {/* Seconds change every tick; animating them means the digit is
+                  mid-slide a third of the time, which reads as jitter. Days,
+                  hours and minutes change rarely enough to be worth the flip. */}
+              <span key={display} className={unit.key === "secs" ? "block" : "tick block"}>
                 {display}
               </span>
             </span>
