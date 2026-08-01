@@ -36,8 +36,14 @@ var CONFIG = {
   /** Your deployed site, no trailing slash. */
   SITE_URL: "https://pedalparty-lac.vercel.app",
 
-  /** Must match REVALIDATE_SECRET in the Vercel project. */
-  REVALIDATE_SECRET: "9a91Rp3Amuioahg",
+  /**
+   * Must match REVALIDATE_SECRET in the Vercel project.
+   *
+   * Leave this "" and put the real value in Apps Script under Project
+   * Settings > Script Properties, key `REVALIDATE_SECRET`. This repo is
+   * public — anything typed on this line is published to the world.
+   */
+  REVALIDATE_SECRET: "",
 
   /**
    * true  — parse as soon as the email lands, but hold the ride back until
@@ -79,9 +85,15 @@ var TZ = "America/Chicago";
 // SET-UP — run once from the Apps Script editor.
 // ============================================================================
 function setUp() {
-  var required = ["SHEET_ID", "SITE_URL", "REVALIDATE_SECRET"];
+  var required = ["SHEET_ID", "SITE_URL"];
   for (var i = 0; i < required.length; i++) {
     if (!CONFIG[required[i]]) throw new Error("CONFIG." + required[i] + " is empty.");
+  }
+  if (!revalidateSecret_()) {
+    throw new Error(
+      "No revalidate secret. Project Settings > Script Properties > add " +
+        "REVALIDATE_SECRET, matching the one in Vercel.",
+    );
   }
 
   ensureHeaderRow_();
@@ -277,13 +289,26 @@ function getImageFolder_() {
 // ============================================================================
 // SITE
 // ============================================================================
+/**
+ * The shared secret for /api/revalidate.
+ *
+ * Script Properties first so the real value lives in the Apps Script project
+ * and never in this file — the repo is public. CONFIG stays as a fallback for
+ * anyone running a private copy.
+ */
+function revalidateSecret_() {
+  var fromProps = PropertiesService.getScriptProperties().getProperty("REVALIDATE_SECRET");
+  return fromProps || CONFIG.REVALIDATE_SECRET;
+}
+
 function revalidateSite_() {
-  if (!CONFIG.SITE_URL || !CONFIG.REVALIDATE_SECRET) return;
+  var secret = revalidateSecret_();
+  if (!CONFIG.SITE_URL || !secret) return;
   try {
     var res = UrlFetchApp.fetch(CONFIG.SITE_URL + "/api/revalidate", {
       method: "post",
       contentType: "application/json",
-      payload: JSON.stringify({ secret: CONFIG.REVALIDATE_SECRET }),
+      payload: JSON.stringify({ secret: secret }),
       muteHttpExceptions: true,
     });
     if (res.getResponseCode() !== 200) {

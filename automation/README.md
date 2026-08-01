@@ -84,7 +84,12 @@ Free prose works too. This parses correctly:
    declared`. If you hit that, delete the test file from the project (the ⋮
    menu beside it in the Files list) and you're back in business.
 4. Fill in `CONFIG` at the top of `rideSync.gs`: `SENDER` (your friend's
-   address), `SHEET_ID`, `SITE_URL`, and the same `REVALIDATE_SECRET`.
+   address), `SHEET_ID` and `SITE_URL`.
+
+   The secret does **not** go in `CONFIG` — this repo is public. Put it in
+   Apps Script under **Project Settings → Script Properties**, key
+   `REVALIDATE_SECRET`, value the same string you set in Vercel. The script
+   reads that first and only falls back to `CONFIG` if it's missing.
 5. Run `setUp()` once and grant the permissions it asks for. It creates the
    header row, the Gmail labels, and the 5-minute trigger.
 6. Run `dryRun()` against a real email to see exactly what the parser gets
