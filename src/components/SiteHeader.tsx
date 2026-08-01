@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { MailIcon } from "./Icons";
 import { nav, site } from "@/lib/content";
 import { BRAND, onBrand } from "@/lib/spectrum";
 
@@ -32,6 +33,15 @@ export default function SiteHeader() {
     return () => {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("mousedown", onClick);
+    };
+  }, [open]);
+
+  // The pinned scroll-logo sits mid-header; tell it to stand down while the
+  // menu panel is open, since the two overlap on a narrow screen.
+  useEffect(() => {
+    document.documentElement.dataset.menuOpen = open ? "true" : "false";
+    return () => {
+      delete document.documentElement.dataset.menuOpen;
     };
   }, [open]);
 
@@ -70,11 +80,17 @@ export default function SiteHeader() {
       style={{ minHeight: "var(--header-h)" }}
     >
       <div className="shell flex h-[var(--header-h)] items-center justify-between gap-3">
+        {/* Below 420px the address would run into the pinned logo sitting in
+            the middle of the header, so it collapses to its icon. */}
         <a
           href={`mailto:${site.email}`}
-          className="text-[0.88rem] font-bold tracking-wide text-purple underline decoration-2 underline-offset-4 sm:text-[0.95rem]"
+          aria-label={site.email}
+          className="flex items-center text-purple"
         >
-          {site.email}
+          <MailIcon className="h-[22px] w-[22px] min-[420px]:hidden" />
+          <span className="hidden text-[0.88rem] font-bold tracking-wide underline decoration-2 underline-offset-4 min-[420px]:inline sm:text-[0.95rem]">
+            {site.email}
+          </span>
         </a>
 
         <div className="relative" ref={menuRef}>

@@ -101,7 +101,28 @@ Everything visual comes from tokens in `src/app/globals.css`:
   two-column About section is the deliberate exception and keeps its
   left-aligned editorial column.
 - **Motion** respects `prefers-reduced-motion` — the ticker, the gallery
-  auto-scroll, the countdown tick and every scroll-in reveal all stop.
+  auto-scroll, the countdown tick, the scroll-in reveals and the hero logo's
+  flight into the header all stop.
+
+### The hero logo's flight
+
+`src/components/ScrollLogo.tsx` moves the mark from the hero up into the middle
+of the header as you scroll the hero past, shrinking it, then pins it there.
+
+Each frame it interpolates between where the logo *would* be if it just scrolled
+with the page and where it should land in the header, so at scroll 0 it sits
+exactly on its spacer and the transition is continuous. Only `transform` is
+touched per frame. Two details worth knowing:
+
+- The hero section is `isolate`, and a fixed child cannot escape a stacking
+  context — the header would always paint over the mark. So on mount the node
+  is reparented to `<body>`. It is server-rendered inside the `<h1>` first, so
+  it is there for the first paint and stays the LCP element; the `<h1>` keeps a
+  visually-hidden "Pedal Party" for its accessible name and the moved image is
+  decorative.
+- The pinned mark sits mid-header, where the open menu panel and the email
+  address both want space. The menu sets `data-menu-open` on `<html>` and the
+  mark fades out; below 420px the email collapses to its icon.
 
 ### The logo
 

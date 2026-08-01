@@ -1,6 +1,7 @@
 import { HERO_PHOTO } from "./HeroBackdrop";
 import { hero } from "@/lib/content";
 import { findBrandLogo } from "@/lib/brandLogo";
+import ScrollLogo from "./ScrollLogo";
 
 /** The hero backdrop when no photo is set — the warm cream already in the
  *  palette (`--color-cream-deep`), a shade deeper than the page below it so
@@ -14,6 +15,9 @@ const HERO_BG = "#fff4e6";
  * the spokes and the counters of "PEDAL PARTY". A flat field is the point: the
  * lettering reads cleanly and nothing competes with the watercolour. On the
  * cream backdrop those counters read as cream — the mark the way it was drawn.
+ *
+ * The mark itself flies up into the header as the hero scrolls past — see
+ * ScrollLogo.tsx.
  *
  * If a real riverfront photo is ever set via HERO_PHOTO, the photo takes over
  * and gets the duotone wash plus a scrim. (HeroBackdrop.tsx still exports the
@@ -76,19 +80,26 @@ export default function Hero() {
             present in /public/images (see src/lib/brandLogo.ts). */}
         <h1 className="mt-5 w-full">
           {logo ? (
-            <picture>
-              {logo.webp ? <source type="image/webp" srcSet={logo.webp} /> : null}
-              {/* Near-square (623x613), so capping the width by 46svh also caps
-                  its height on short viewports. */}
-              <img
-                src={logo.src}
-                width={logo.width}
-                height={logo.height}
-                alt={hero.title}
-                fetchPriority="high"
-                className="hero-lift-lg mx-auto block h-auto w-[min(74vw,24rem,46svh)] max-w-full"
-              />
-            </picture>
+            /* ScrollLogo flies the mark up into the header as the hero scrolls
+               past. It sizes itself from the spacer, so the width lives there. */
+            <>
+              {/* The mark is reparented to <body> on mount, so the accessible
+                  name for this heading lives here rather than in its alt. */}
+              <span className="sr-only">{hero.title}</span>
+              <ScrollLogo aspect={(logo.width ?? 623) / (logo.height ?? 613)}>
+                <picture>
+                  {logo.webp ? <source type="image/webp" srcSet={logo.webp} /> : null}
+                  <img
+                    src={logo.src}
+                    width={logo.width}
+                    height={logo.height}
+                    alt=""
+                    fetchPriority="high"
+                    className="hero-lift-lg block h-auto w-full"
+                  />
+                </picture>
+              </ScrollLogo>
+            </>
           ) : (
             <span className="text-sticker hero-lift-lg block text-[clamp(3.4rem,15vw,8.5rem)] leading-[0.92]">
               {hero.title}

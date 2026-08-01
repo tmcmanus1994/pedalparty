@@ -37,8 +37,8 @@
   --font-body: var(--font-display);
 
   /* --- Section rhythm --- */
-  --spacing-section: 3.75rem;
-  --spacing-section-lg: 7rem;
+  --spacing-section: 2.75rem;
+  --spacing-section-lg: 5rem;
 }
 
 @theme inline {
@@ -155,7 +155,7 @@ p {
   }
   @media (min-width: 640px) {
     .band {
-      padding-block: 5.25rem;
+      padding-block: 3.75rem;
     }
   }
   @media (min-width: 1024px) {
@@ -332,6 +332,15 @@ p {
     margin-bottom: 0.45rem;
     font-weight: var(--w-strong);
     font-size: 0.95rem;
+  }
+
+  /* The pinned hero logo yields to the open menu panel. */
+  .scroll-logo {
+    transition: opacity 180ms ease;
+  }
+  html[data-menu-open="true"] .scroll-logo {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* ---------- Hero lift ----------
