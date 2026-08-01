@@ -205,13 +205,14 @@ export function RideCard({ ride }: { ride: Ride }) {
 }
 
 /**
- * ⚠️ REVIEW MODE — set this back to `false` before launch.
- *
  * `true`  → the section stacks all five states, labelled, for review.
- * `false` → the section shows the one state the sheet's `Status` selects,
- *           which is the real behaviour.
+ * `false` → the section shows the one state the ride store's `status`
+ *           selects, which is the real behaviour.
+ *
+ * Off, because the console at /admin publishes the real card now and review
+ * mode would hide it. The all-states view still lives at /preview/next-ride.
  */
-export const PREVIEW_ALL_STATES = true;
+export const PREVIEW_ALL_STATES = false;
 
 export default function NextRide({ ride }: { ride: Ride }) {
   return (

@@ -1,5 +1,21 @@
 # Pedal Party — rethinking the weekly ride pipeline
 
+> **Resolved — this is now history.** The pipeline described below as "what was
+> built" is gone: Apps Script, Drive and the Google Sheet were deleted, and the
+> ride is published from a password-protected console at `/admin` that reads
+> the post with Claude. See the ride-console section of the root `README.md`.
+>
+> Of the options in §7 it landed closest to **B** (webhook → app → Claude →
+> storage) with **D**'s human-in-the-loop step: Claude drafts, a person checks
+> the preview and clicks publish. The §8 questions were answered as follows —
+> Claude both extracts *and* writes the title; the ride lives in Vercel Blob as
+> a readable JSON file you can hand-edit; publishing is approve-first; the
+> three-pill model survived, with the extra location and time pushed into plan
+> lines; and email is a later, optional layer behind `/api/ingest`.
+>
+> The rest of this document is kept as written, because §5 and §6 are the
+> evidence for why the pipeline looks the way it does.
+
 A briefing for a fresh design conversation. Everything needed to reason about
 the problem is in here; no need to read the repo.
 

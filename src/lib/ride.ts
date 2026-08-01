@@ -5,18 +5,14 @@
  * one card layout (heading + sub + optional note pill + countdown row);
  * State B is the richer ride-detail card.
  *
- * Data source: the existing Google Sheet the Cowork automation already writes
- * to. Nothing about that pipeline changes — the site reads the sheet, it does
- * not own it. Publish the sheet to the web as CSV and set RIDE_SHEET_CSV_URL;
- * with the variable unset the site renders the fallback below, so local dev
- * and previews work with no credentials.
- *
- * Sheet columns (handoff §8.3):
- *   Ride Date | Theme/Title | Sub Text | Starting Location | Gathering Time |
- *   Start Rolling | Plan 1 | Plan 2 | Plan 3 | Plan 4 | Alert | Status |
- *   Next Ride | Image URL
+ * Data source: one JSON object in Vercel Blob, written by /admin. See
+ * `rideStore.ts`. With the store unconfigured or empty the site renders the
+ * fallback below, so local dev and previews work with no credentials.
  */
 
+// Type-only, so this module stays free of the Blob client and can be imported
+// by the admin console's preview in the browser.
+import type { StoredRide } from "./rideStore";
 import { nextSaturdayNoonCentral, nextSeasonOpener } from "./time";
 
 export type RideStatus =
@@ -43,7 +39,10 @@ export type Ride = {
   note?: string;
 };
 
-const STATUSES: RideStatus[] = [
+/** The ride fields a human owns. The countdown target is derived at read time. */
+export type RideContent = Omit<Ride, "countdownTarget">;
+
+export const STATUSES: RideStatus[] = [
   "Schedule",
   "Waiting",
   "NoRide",
@@ -51,7 +50,7 @@ const STATUSES: RideStatus[] = [
   "Hibernating",
 ];
 
-/** Example ride from the handoff — used whenever the sheet is unreachable. */
+/** Example ride from the handoff — used whenever the store is empty or unreachable. */
 export const FALLBACK_RIDE: Omit<Ride, "countdownTarget"> = {
   status: "Schedule",
   title: "Taco 'Bout Halfway",
@@ -69,107 +68,36 @@ export const FALLBACK_RIDE: Omit<Ride, "countdownTarget"> = {
   imageUrl: "/images/flyer-taco-bout-halfway.jpg",
 };
 
-/** Fill in the countdown target a status implies, if the sheet didn't supply one. */
-function withCountdown(ride: Omit<Ride, "countdownTarget"> & { countdownTarget?: string }): Ride {
+/** Fill in the countdown target a status implies, if none was supplied. */
+export function withCountdown(
+  ride: Omit<Ride, "countdownTarget"> & { countdownTarget?: string },
+): Ride {
   const target =
     ride.countdownTarget ||
     (ride.status === "Hibernating" ? nextSeasonOpener() : nextSaturdayNoonCentral());
   return { ...ride, countdownTarget: target };
 }
 
-/** Minimal RFC 4180 CSV parser — handles quoted fields, commas and newlines inside quotes. */
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let cell = "";
-  let quoted = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (quoted) {
-      if (ch === '"') {
-        if (text[i + 1] === '"') {
-          cell += '"';
-          i++;
-        } else {
-          quoted = false;
-        }
-      } else {
-        cell += ch;
-      }
-      continue;
-    }
-    if (ch === '"') {
-      quoted = true;
-    } else if (ch === ",") {
-      row.push(cell);
-      cell = "";
-    } else if (ch === "\n") {
-      row.push(cell);
-      rows.push(row);
-      row = [];
-      cell = "";
-    } else if (ch !== "\r") {
-      cell += ch;
-    }
-  }
-  if (cell !== "" || row.length) {
-    row.push(cell);
-    rows.push(row);
-  }
-  return rows.filter((r) => r.some((c) => c.trim() !== ""));
-}
-
-function normalizeStatus(value: string): RideStatus {
+export function normalizeStatus(value: string): RideStatus {
   const cleaned = value.replace(/[\s_-]/g, "").toLowerCase();
   const match = STATUSES.find((s) => s.toLowerCase() === cleaned);
   return match ?? "Waiting";
 }
 
-function rowToRide(header: string[], row: string[]): Ride {
-  const key = (name: string) => {
-    const idx = header.findIndex(
-      (h) => h.trim().toLowerCase() === name.toLowerCase(),
-    );
-    return idx === -1 ? "" : (row[idx] ?? "").trim();
-  };
-
-  const plan = [key("Plan 1"), key("Plan 2"), key("Plan 3"), key("Plan 4")].filter(Boolean);
-
-  return withCountdown({
-    status: normalizeStatus(key("Status")),
-    title: key("Theme/Title") || key("Theme") || undefined,
-    sub: key("Sub Text") || undefined,
-    location: key("Starting Location") || undefined,
-    gatherTime: key("Gathering Time") || undefined,
-    rollTime: key("Start Rolling") || undefined,
-    plan: plan.length ? plan : undefined,
-    alert: key("Alert") || undefined,
-    note: key("Note") || key("Alert") || undefined,
-    imageUrl: key("Image URL") || undefined,
-    countdownTarget: key("Next Ride") || undefined,
-  });
-}
-
 /**
- * Read the current ride. Revalidates every 5 minutes so a sheet edit reaches
- * the site quickly without a redeploy.
+ * Turn what's in the store into the ride to render *right now*.
+ *
+ * A held ride resolves to the Waiting card counting down to its release, and
+ * flips on its own the moment that instant passes — which is why holding
+ * until Saturday noon needs no scheduled job. The site re-renders at least
+ * every five minutes, so the flip lands within five minutes of noon.
+ *
+ * Pure and exported so it can be tested without touching the network.
  */
-export async function getRide(): Promise<Ride> {
-  const url = process.env.RIDE_SHEET_CSV_URL;
-  if (!url) return withCountdown(FALLBACK_RIDE);
-
-  try {
-    // Tagged so /api/revalidate can drop this cache entry on demand when the
-    // Saturday automation writes a new row.
-    const res = await fetch(url, { next: { revalidate: 300, tags: ["ride"] } });
-    if (!res.ok) throw new Error(`Sheet responded ${res.status}`);
-    const rows = parseCsv(await res.text());
-    if (rows.length < 2) throw new Error("Sheet has no data rows");
-    // Last non-empty row wins — the automation appends the current week.
-    return rowToRide(rows[0], rows[rows.length - 1]);
-  } catch (err) {
-    console.error("[pedalparty] ride sheet fetch failed, using fallback:", err);
-    return withCountdown(FALLBACK_RIDE);
+export function resolveStoredRide(stored: StoredRide, now: number = Date.now()): Ride {
+  const holdUntil = stored.publishAt ? Date.parse(stored.publishAt) : NaN;
+  if (Number.isFinite(holdUntil) && now < holdUntil) {
+    return { status: "Waiting", countdownTarget: new Date(holdUntil).toISOString() };
   }
+  return withCountdown(stored.ride);
 }

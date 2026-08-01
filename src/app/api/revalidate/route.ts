@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { refreshSite } from "@/lib/refresh";
 
 /**
- * Push the site to re-read the ride sheet right now.
+ * Push the site to re-read the ride store right now.
  *
- * Without this the homepage picks up sheet edits within 5 minutes on its own
- * (`revalidate = 300`). The Saturday automation calls this the moment it
- * writes a row so the new ride is live in seconds instead.
+ * Without this the homepage picks up a new ride within 5 minutes on its own
+ * (`revalidate = 300`). Publishing from /admin refreshes directly through
+ * `refreshSite()`; this endpoint is the same action for anything outside the
+ * app — a webhook, a script, a hand-run curl after editing the stored JSON.
  *
  *   curl -X POST https://<site>/api/revalidate \
  *        -H "content-type: application/json" \
@@ -50,8 +51,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  revalidateTag("ride");
-  revalidatePath("/");
+  refreshSite();
 
   return NextResponse.json({ revalidated: true, at: new Date().toISOString() });
 }

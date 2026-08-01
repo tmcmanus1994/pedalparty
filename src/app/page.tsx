@@ -9,9 +9,9 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import Ticker from "@/components/Ticker";
 import { faq, site } from "@/lib/content";
-import { getRide } from "@/lib/ride";
+import { getRide } from "@/lib/getRide";
 
-/** The sheet drives the Next Ride state, so re-render at most every 5 minutes. */
+/** The ride store drives the Next Ride state, so re-render at most every 5 minutes. */
 export const revalidate = 300;
 
 export default async function Home() {

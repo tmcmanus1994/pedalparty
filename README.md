@@ -30,8 +30,8 @@ when you want to wire up the real data.
 3. Add the domain under **Settings → Domains**.
 
 The homepage revalidates every 5 minutes (`export const revalidate = 300` in
-`src/app/page.tsx`), so a change in the ride sheet reaches the live site within
-5 minutes without a redeploy.
+`src/app/page.tsx`), and publishing from `/admin` refreshes it immediately, so
+a new ride is live in seconds without a redeploy.
 
 ---
 
@@ -179,50 +179,84 @@ One `Status` value picks exactly one card (`src/lib/ride.ts`):
 Countdown targets are computed in Central time, so "Saturday at noon" means
 noon in Little Rock no matter where the visitor is.
 
-**Data source.** Set `RIDE_SHEET_CSV_URL` to the published-CSV URL of the
-Google Sheet the existing Cowork automation already writes to. The site only
-reads it — the automation is untouched. Expected columns:
+**Data source.** One JSON object in Vercel Blob at `ride/current.json`,
+written by the console at `/admin`. Shape:
 
-```
-Ride Date | Theme/Title | Sub Text | Starting Location | Gathering Time |
-Start Rolling | Plan 1 | Plan 2 | Plan 3 | Plan 4 | Alert | Status |
-Next Ride | Image URL
+```jsonc
+{
+  "ride":      { "status": "Schedule", "title": "…", "location": "…", "plan": ["…"] },
+  "publishAt": "2026-08-08T17:00:00.000Z",  // or null for "live now"
+  "updatedAt": "2026-08-01T14:22:10.114Z",
+  "source":    "admin"
+}
 ```
 
-The last non-empty row wins. If the fetch fails for any reason the site logs it
-and renders the fallback ride rather than erroring.
+`publishAt` is what "hold until Saturday noon" writes, and it is resolved at
+**read** time: until that instant the site shows the Waiting countdown, and
+after it the ride appears on its own. Nothing has to wake up at noon, which is
+why this project has no scheduled job anywhere in it.
+
+If the store is empty or unreachable the site logs it and renders
+`FALLBACK_RIDE` rather than erroring, so a fresh clone with no credentials
+still builds and runs.
 
 **Previewing the states.** Two ways, both driven by the same component
 (`src/components/RideStates.tsx`), so they can't drift apart:
 
-- `PREVIEW_ALL_STATES` in `src/components/NextRide.tsx` — **currently `true`**,
-  which makes the homepage's Next Ride section stack all five states, labelled,
-  instead of showing one. ⚠️ Set it back to `false` before launch.
+- `PREVIEW_ALL_STATES` in `src/components/NextRide.tsx` — when `true`, the
+  homepage's Next Ride section stacks all five states, labelled, instead of
+  showing one. Currently `false`.
 - `/preview/next-ride` — the same view on its own noindex page, linked from
-  nowhere. Stays useful after the homepage flag goes back to `false`.
+  nowhere.
 
-To change what the homepage shows once the flag is off, set the `Status` column
-in the sheet, or edit `FALLBACK_RIDE.status` in `src/lib/ride.ts` locally.
+To change what the homepage shows, set the status in `/admin`, or edit
+`FALLBACK_RIDE.status` in `src/lib/ride.ts` locally.
 
-### The Saturday automation
+## The ride console (`/admin`)
 
-`automation/` holds a Google Apps Script that watches Gmail for the weekly ride
-email, parses it into the card's fields, saves the flyer to Drive, writes the
-row to the ride sheet and pings `/api/revalidate` so the site updates in
-seconds. See `automation/README.md` for the setup and the email format.
+Password-protected (`ADMIN_PASSWORD`). Paste the volunteer's weekly post,
+Claude reads it into the card's fields, you check the preview — which is the
+real `RideCard`, not a mockup — fix anything that's off, and publish now or
+hold until Saturday noon Central.
 
-The parser is plain JS with its own test run:
+```
+paste post → POST /api/admin/extract → Claude (claude-opus-5, structured
+             outputs) → editable fields + live preview
+           → POST /api/admin/publish → Vercel Blob + cache refresh → live
+```
+
+The extraction rules live in the system prompt in `src/lib/extractRide.ts` —
+which pill means what, @handles become venue names, safety callouts merge into
+one line, plan lines stay under ~75 characters, and a title gets written when
+the post doesn't name the ride (it usually doesn't). They're the product
+decisions, so change them deliberately:
 
 ```bash
-node automation/parseRideEmail.test.js
+npm run test:store             # hold/publish logic, no API key needed
+ANTHROPIC_API_KEY=… npm run test:extract   # the rules, against a real post
 ```
+
+`npm run test:extract` runs the hardest real post we have through the live
+model and asserts every rule. When a real post comes out wrong, add it to
+`scripts/` as a case first, then change the prompt.
+
+**Why Blob and not KV.** One env var that Vercel injects for you, no
+third-party account, and the stored object is a readable JSON file you can
+open and hand-edit — which keeps the one virtue the old Google Sheet had.
+
+### Email ingestion (not built)
+
+`POST /api/ingest` with `INGEST_SECRET` stores a post as a *draft*, and
+`/admin` finds it already in the textarea next time it's opened. Nothing
+publishes without a human clicking a button. Wiring up inbound email later
+means pointing a forwarding rule at that URL and changing nothing else.
 
 ### On-demand revalidation
 
 `POST /api/revalidate` with `REVALIDATE_SECRET` drops the cached ride and
-re-renders the homepage immediately, instead of waiting out the 5-minute
-window. The sheet fetch is tagged `ride` so the endpoint can invalidate it
-directly.
+re-renders the homepage immediately. Publishing from `/admin` does the same
+thing directly through `src/lib/refresh.ts`; this endpoint is that action for
+callers outside the app.
 
 ### The contact form
 
