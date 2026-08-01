@@ -25,7 +25,7 @@ var CONFIG = {
   EXTRA_QUERY: "",
 
   /** The ride sheet: File > Share > copy the /d/<THIS PART>/edit id. */
-  SHEET_ID: "",
+  SHEET_ID: "1MPnTwn_oEgF15pQCvik_Bhb6gpSyvKMGsHD6QIbPhV0",
 
   /** Tab name inside that spreadsheet. */
   SHEET_NAME: "Rides",
@@ -34,10 +34,10 @@ var CONFIG = {
   DRIVE_FOLDER_ID: "",
 
   /** Your deployed site, no trailing slash. */
-  SITE_URL: "https://pedalpartylr.com",
+  SITE_URL: "https://pedalparty-lac.vercel.app",
 
   /** Must match REVALIDATE_SECRET in the Vercel project. */
-  REVALIDATE_SECRET: "",
+  REVALIDATE_SECRET: "9a91Rp3Amuioahg",
 
   /**
    * true  — parse as soon as the email lands, but hold the ride back until
