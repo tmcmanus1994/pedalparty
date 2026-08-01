@@ -316,22 +316,25 @@ npm run test:store   # hold/publish logic and Central-time maths, no credentials
 
 ### The hero backdrop
 
-Two Vimeo videos play behind the hero — a wide cut above 768px, a tall one
-below — through Vimeo's `background=1` mode: autoplay, loop, muted, no
-controls. `dnt=1` asks Vimeo not to set tracking cookies. The player mounts
-after first paint and only ever loads one of the two, so a phone never
-downloads the desktop cut and the video never competes with the hero for
-bandwidth. Under `prefers-reduced-motion` it doesn't load at all.
+A Vimeo video plays behind the hero through Vimeo's `background=1` mode:
+autoplay, loop, muted, no controls. `dnt=1` asks Vimeo not to set tracking
+cookies. The player mounts after first paint so it never competes with the
+hero for the first bytes, and under `prefers-reduced-motion` it doesn't load
+at all.
 
 The hero was designed cream with dark type, so the video sits behind a cream
 veil at 82%. That keeps every contrast decision above it intact: against the
 darkest possible video frame, the body type still measures about 9.2:1.
 
 ⚠️ **An iframe can't be `object-fit: cover`d**, so the frame is oversized past
-the hero on whichever axis needs it — and that maths needs each video's real
-shape, which is assumed in `src/components/HeroVideo.tsx`. If either video
-looks squashed or letterboxed, correct its `aspect` there and nothing else
+the hero on whichever axis needs it — and that maths needs the video's real
+shape, which is assumed to be 16:9 in `src/components/HeroVideo.tsx`. If the
+backdrop looks squashed or shows bars, correct `aspect` there and nothing else
 changes.
+
+A second, portrait cut exists at Vimeo id `1214855728`. It isn't wired up —
+one video runs at every size for now. To bring it back, pick between the two
+on a `(min-width: 768px)` media query and give each its own aspect.
 
 ### The animated mark
 
