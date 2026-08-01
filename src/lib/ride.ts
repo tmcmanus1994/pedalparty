@@ -160,7 +160,9 @@ export async function getRide(): Promise<Ride> {
   if (!url) return withCountdown(FALLBACK_RIDE);
 
   try {
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    // Tagged so /api/revalidate can drop this cache entry on demand when the
+    // Saturday automation writes a new row.
+    const res = await fetch(url, { next: { revalidate: 300, tags: ["ride"] } });
     if (!res.ok) throw new Error(`Sheet responded ${res.status}`);
     const rows = parseCsv(await res.text());
     if (rows.length < 2) throw new Error("Sheet has no data rows");

@@ -2,6 +2,7 @@ import { HERO_PHOTO } from "./HeroBackdrop";
 import { hero } from "@/lib/content";
 import { findBrandLogo } from "@/lib/brandLogo";
 import ScrollLogo from "./ScrollLogo";
+import HeroFade from "./HeroFade";
 
 /** The hero backdrop when no photo is set — the warm cream already in the
  *  palette (`--color-cream-deep`), a shade deeper than the page below it so
@@ -69,12 +70,16 @@ export default function Hero() {
       ) : null}
 
       <div className="shell relative flex flex-col items-center py-24 text-center">
-        <p
-          className="pill sticker hero-lift !border-[3px] !px-5 !py-2 !text-[0.92rem] uppercase tracking-[0.1em] text-ink"
-          style={{ "--tilt": "-3deg", background: "#e1c718" } as React.CSSProperties}
-        >
-          {hero.badge}
-        </p>
+        {/* Badge first, then the subtitle, then the buttons — the hero empties
+            from the top down as the mark climbs to the header. */}
+        <HeroFade speed={1.6}>
+          <p
+            className="pill sticker hero-lift !border-[3px] !px-5 !py-2 !text-[0.92rem] uppercase tracking-[0.1em] text-ink"
+            style={{ "--tilt": "-3deg", background: "#e1c718" } as React.CSSProperties}
+          >
+            {hero.badge}
+          </p>
+        </HeroFade>
 
         {/* The logo IS the h1 — the wordmark is the fallback if no artwork is
             present in /public/images (see src/lib/brandLogo.ts). */}
@@ -109,22 +114,26 @@ export default function Hero() {
 
         {/* One sentence, one line. "SOCIAL RIDE." stays caps but sits inside the
             sentence — heavier and in brand purple rather than a separate pill. */}
-        <p className="hero-lift mt-6 max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-ink lg:max-w-none lg:whitespace-nowrap">
-          {hero.subtitleLead}{" "}
-          {/* Purple, not the brand yellow — yellow on cream is 1.56:1. */}
-          <span className="font-extrabold tracking-[0.06em]" style={{ color: "#5f13a9" }}>
-            {hero.subtitleEmphasis}
-          </span>
-        </p>
+        <HeroFade speed={1.25} className="mt-6 w-full">
+          <p className="hero-lift mx-auto max-w-[46ch] text-balance text-[clamp(1.05rem,2.35vw,1.45rem)] font-bold leading-[1.4] text-ink lg:max-w-none lg:whitespace-nowrap">
+            {hero.subtitleLead}{" "}
+            {/* Purple, not the brand yellow — yellow on cream is 1.56:1. */}
+            <span className="font-extrabold tracking-[0.06em]" style={{ color: "#5f13a9" }}>
+              {hero.subtitleEmphasis}
+            </span>
+          </p>
+        </HeroFade>
 
-        <div className="hero-lift mt-9 flex flex-wrap items-center justify-center gap-3.5">
-          <a href="#next-ride" className="btn btn-primary">
-            {hero.primaryCta}
-          </a>
-          <a href="#about" className="btn btn-secondary">
-            {hero.secondaryCta}
-          </a>
-        </div>
+        <HeroFade speed={1} className="mt-9">
+          <div className="hero-lift flex flex-wrap items-center justify-center gap-3.5">
+            <a href="#next-ride" className="btn btn-primary">
+              {hero.primaryCta}
+            </a>
+            <a href="#about" className="btn btn-secondary">
+              {hero.secondaryCta}
+            </a>
+          </div>
+        </HeroFade>
       </div>
     </section>
   );

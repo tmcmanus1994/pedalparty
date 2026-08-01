@@ -13,6 +13,12 @@ const config = [
       "@next/next/no-img-element": "off",
     },
   },
+  {
+    // Plain CommonJS on purpose — these files are pasted into Google Apps
+    // Script, which has no module system, and run under bare Node here.
+    files: ["automation/**/*.js"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
   { ignores: [".next/**", "node_modules/**", "next-env.d.ts"] },
 ];
 

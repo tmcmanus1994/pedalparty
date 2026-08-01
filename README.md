@@ -204,6 +204,26 @@ and renders the fallback ride rather than erroring.
 To change what the homepage shows once the flag is off, set the `Status` column
 in the sheet, or edit `FALLBACK_RIDE.status` in `src/lib/ride.ts` locally.
 
+### The Saturday automation
+
+`automation/` holds a Google Apps Script that watches Gmail for the weekly ride
+email, parses it into the card's fields, saves the flyer to Drive, writes the
+row to the ride sheet and pings `/api/revalidate` so the site updates in
+seconds. See `automation/README.md` for the setup and the email format.
+
+The parser is plain JS with its own test run:
+
+```bash
+node automation/parseRideEmail.test.js
+```
+
+### On-demand revalidation
+
+`POST /api/revalidate` with `REVALIDATE_SECRET` drops the cached ride and
+re-renders the homepage immediately, instead of waiting out the 5-minute
+window. The sheet fetch is tagged `ride` so the endpoint can invalidate it
+directly.
+
 ### The contact form
 
 `POST /api/contact` validates the payload, drops honeypot submissions, then
